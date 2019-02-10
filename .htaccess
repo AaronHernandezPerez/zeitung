@@ -1,0 +1,7 @@
+RewriteEngine On
+RewriteBase /z
+RewriteCond $1 !^(index.php|css|js|images|robots.txt|assets)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+#si no pones esto, no puedes utilizar los assets
+RewriteRule ^(.*)$ index.php?/$1 [L]
