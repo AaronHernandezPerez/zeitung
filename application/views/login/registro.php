@@ -1,6 +1,6 @@
 <div class="container">
-  <h1>Registro de Periodista</h1>
-  <form action="<?php echo base_url(); ?>editor/registrarEditor" method="post" autocomplete="off">
+  <h3>Registro de Periodista</h3>
+  <form action="<?php echo base_url(); ?>login/registrarEditor" method="post" autocomplete="off">
     <div class="form-row">
       <div class="form-group col-md-4">
         <label for="username">Usuario</label>
@@ -32,15 +32,21 @@
 
       <div class="form-group col-md-4 d-flex align-items-end">
         <div class="custom-control custom-checkbox pb-2">
-          <input type="hidden" name="administrador" value="0">
           <input type="checkbox" class="custom-control-input" id="administrador" name="administrador" value="1">
           <label class="custom-control-label" for="administrador">Administrador</label>
         </div>
       </div>
     </div>
 
+    <div class="row">
+      <div class="col d-flex justify-content-center">
+        <button class="btn btn-success btn-block">Registrarse</button>
+      </div>
+      <div class="col d-flex justify-content-center">
+        <a href="<?php echo base_url() ?>login" class="btn btn-primary btn-block">Volver</a>
+      </div>
+    </div>
     <div class="d-flex justify-content-center mt-2">
-      <button class="btn btn-lg btn-success">Registrarse</button>
     </div>
   </form>
 </div>

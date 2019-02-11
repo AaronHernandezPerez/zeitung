@@ -7,11 +7,10 @@ class Editor extends CI_Controller
   public function __construct()
   {
     parent::__construct();
-        // echo ($_SESSION['username']);
-    unset($_SESSION['username']);
-    // Comprobamos si ha iniciado sesión en cualquier lugar menos en registro
-    if (($this->uri->segment('2') && $this->uri->segment('2') != 'registro') && !$this->session->has_userdata('username')) {
-      redirect('editor');
+    // Comprobamos si ha iniciado sesión todos los sitios
+    if (!$this->session->has_userdata('username')) {
+      $this->alertas->add("No has <b>iniciado sesión</b>");
+      // redirect('login');
       die;
     }
   }
@@ -24,10 +23,11 @@ class Editor extends CI_Controller
   public function index()
   {
     $datos['titulo'] = 'Titulo';
-    $datos['contenido'] = 'editor/index.php';
-    // Ubicaciones de los archivos CSS y JS
-    // $datos['miCSS'] = '';
-    $this->load->view('vista_editor', $datos);
+    
+    // Si se ha mandado un mensaje POST, intentará autenticar al usuario, sino cargará la página de login
+
+    $datos['contenido'] = 'editor/resumen.php';
+    $this->load->view('template_editor', $datos);
   }
 
   public function noticias()
@@ -45,4 +45,10 @@ class Editor extends CI_Controller
 
   }
 
+
+  public function cerrarSesion()
+  {
+    $this->session->sess_destroy();
+    redirect('login');
+  }
 }

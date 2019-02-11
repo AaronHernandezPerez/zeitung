@@ -14,7 +14,7 @@
   <link href="<?php echo base_url() ?>assets/css/<?php echo $miCSS ?>" rel="stylesheet">
   <?php endif ?>
   <!-- Ionicons -->
-  <link href="https://unpkg.com/ionicons@4.5.5/dist/css/ionicons.min.css" rel="stylesheet">
+  <!-- <link href="https://unpkg.com/ionicons@4.5.5/dist/css/ionicons.min.css" rel="stylesheet"> -->
   <!-- Base url -->
   <?php echo "<script>const BASE_URL='" . base_url() . "';</script>" ?>
   <title><?php echo $titulo ?></title>
