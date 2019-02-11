@@ -45,30 +45,4 @@ class Editor extends CI_Controller
 
   }
 
-  public function registro()
-  {
-    $datos['titulo'] = 'Registro de Periodista';
-    $datos['contenido'] = 'editor/registro.php';
-    // Ubicaciones de los archivos CSS y JS
-    // $datos['miCSS'] = '';
-    $this->load->view('vista_editor', $datos);
-  }
-
-  /**
-   * Registra el editor pasado por post
-   *
-   * @return void
-   */
-  public function registrarEditor()
-  {
-    // Primero, el usuario y el email se pasarán a minusculas
-    $_POST['username'] = strtolower($_POST['username']);
-    $_POST['email'] = strtolower($_POST['email']);
-    // El nombre y los apellidos se capitalizará la primera letra de cada palabra
-    $_POST['nombre'] = ucwords($_POST['nombre']);
-    $_POST['apellidos'] = ucwords($_POST['apellidos']);
-
-    
-    // redirect('editor');
-  }
 }
