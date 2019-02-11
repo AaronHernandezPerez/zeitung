@@ -1,0 +1,23 @@
+{
+  "deploy": {
+    "targets": [
+      {
+        "type": "sftp",
+        "name": "Zeitung",
+        "description": "Periodico Zeitung",
+        "dir": "/home/aaronh/public_html/zeitung",
+        "host": "http://exskills2018",
+        "port": 22,
+        "user": "aaronh",
+        "password": "danieldasasco",
+        "checkBeforeDeploy": true,
+        "mappings": [
+          {
+            "source": "F:/JavaScipt/zeitung",
+            "target": "/home/aaronh/public_html/zeitung"
+          }
+        ]
+      }
+    ]
+  }
+}

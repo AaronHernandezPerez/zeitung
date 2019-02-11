@@ -1,3 +1,10 @@
+<style>
+#navbar .nav-link {
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
+</style>
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark text-white">
   <a class="navbar-brand">Edicción</a>
   <button class="navbar-toggler" data-target="#navbar" data-toggle="collapse" aria-controls="navbar"
@@ -5,15 +12,37 @@
     <span class="navbar-toggler-icon"></span>
   </button>
   <div id="navbar" class="collapse navbar-collapse">
-    <ul class="navbar-nav mr-auto">
+    <ul class="navbar-nav mx-auto">
       <li class="nav-item active">
         <a class="nav-link" href="<?php echo base_url() ?>editor">Estadísticas</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#" tabindex="-1">Item 2</a>
+        <a class="nav-link" href="<?php echo base_url() ?>editor/">Publicar noticia</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="<?php echo base_url() ?>editor/cerrarSesion" tabindex="-1">Cerrar Sesión</a>
+        <a class="nav-link" href="<?php echo base_url() ?>editor/">Editiar noticias</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="<?php echo base_url() ?>editor/">Moderar comentarios</a>
+      </li>
+      <?php if ($_SESSION['admin']) : ?>
+      <!-- Menu solo para los administradores -->
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          Opciones Admin
+        </a>
+        <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
+          <a class="nav-link" href="<?php echo base_url() ?>editor/categoria">Añadir categoria</a>
+          <div class="dropdown-divider"></div>
+          <a class="nav-link" href="<?php echo base_url() ?>editor/">Admin Noticias</a>
+          <a class="nav-link" href="<?php echo base_url() ?>editor/">Admin comentarios</a>
+          <a class="nav-link" href="<?php echo base_url() ?>editor/">Admin editores</a>
+        </div>
+      </li>
+      <?php endif; ?>
+      <li class="nav-item">
+        <a class="nav-link" href="<?php echo base_url() ?>editor/cerrarSesion">Cerrar Sesión</a>
       </li>
     </ul>
   </div>
