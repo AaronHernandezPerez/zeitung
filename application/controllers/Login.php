@@ -9,7 +9,7 @@ class Login extends CI_Controller
     parent::__construct();
     // Comprobamos si ha iniciado sesión todos los sitios
     if ($this->session->has_userdata('username')) {
-      // redirect('editor');
+      redirect('editor');
       die;
     }
   }
@@ -52,17 +52,14 @@ class Login extends CI_Controller
     $_POST['username'] = strtolower($_POST['username']);
     $_POST['email'] = strtolower($_POST['email']);
     // El nombre y los apellidos se capitalizará la primera letra de cada palabra
-    $_POST['nombre'] = ucwords($_POST['nombre']);
-    $_POST['apellidos'] = ucwords($_POST['apellidos']);
+    $_POST['nombre'] = ucwords(strtolower($_POST['nombre']));
+    $_POST['apellidos'] = ucwords(strtolower($_POST['apellidos']));
     // Por ultimo encriptamos la contraseña con Argon2
     $_POST['password'] = password_hash($_POST['password'], PASSWORD_ARGON2I);
 
-    // Utilizaremos Flash data para enviar la información al modelo para registrarlo
-    $this->session->set_flashdata('editor', $_POST);
-    
     // Importamoos el modelo y lo llamamos con los datos guardados
     $this->load->model('editores_m');
-    $this->editores_m->registrarEditor();
+    $this->editores_m->registrarEditor($_POST);
     
     // Iniciamos sesión
     $this->autenticarEditor($_POST['username']);

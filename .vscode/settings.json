@@ -1,12 +1,19 @@
 {
   "deploy": {
+    "ignore": [
+      "/.vscode/*",
+      //   "/.git",
+      //   "/.htaccess",
+      //   "application/config/",
+      "remoto.bat"
+    ],
     "targets": [
       {
         "type": "sftp",
         "name": "Zeitung",
         "description": "Periodico Zeitung",
         "dir": "/home/aaronh/public_html/zeitung",
-        "host": "http://exskills2018",
+        "host": "exskills2018",
         "port": 22,
         "user": "aaronh",
         "password": "danieldasasco",

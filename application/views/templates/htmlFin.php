@@ -4,10 +4,12 @@
 <script src="<?php echo base_url() ?>assets/libraries/bootstrap/popper.js"></script>
 <!-- Libreria Bootstrap -->
 <script src="<?php echo base_url() ?>assets/libraries/bootstrap/bootstrap.js"></script>
-
+<!-- Navbar active enlaces -->
+<script src="<?php echo base_url() ?>assets/js/navbar-activo.js"></script>
+<?php //print_r($miJS) ?>
 <?php if (isset($miJS)) foreach ($miJS as $archivo) : ?>
 <!-- Mi js -->
-<script src="<?php echo base_url() ?>assets/js/<?php $archivo ?>"></script>
+<script src="<?php echo base_url() ?>assets/<?php echo $archivo ?>"></script>
 <?php endforeach ?>
 </body>
 

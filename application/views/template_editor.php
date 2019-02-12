@@ -2,7 +2,7 @@
 $this->load->view('templates/htmlInicio.php');
 // Carga el nabar 
 $this->load->view('editor/navbar.php'); ?>
-<!-- Inicio de l contenido -->
+<!-- Inicio del contenido -->
 <div class="container mt-4">
   <?php echo $this->alertas->show() ?>
   <?php $this->load->view($contenido); ?>

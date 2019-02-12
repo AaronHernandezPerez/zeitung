@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 31-01-2019 a las 13:28:16
+-- Tiempo de generación: 11-02-2019 a las 13:03:29
 -- Versión del servidor: 10.1.37-MariaDB
 -- Versión de PHP: 7.2.12
 
@@ -33,8 +33,15 @@ USE `zeitung`;
 DROP TABLE IF EXISTS `categorias`;
 CREATE TABLE `categorias` (
   `id` int(11) NOT NULL,
-  `descripcion` varchar(100) COLLATE utf8mb4_spanish_ci NOT NULL
+  `nombre` varchar(100) COLLATE utf8mb4_spanish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `categorias`
+--
+
+INSERT INTO `categorias` (`id`, `nombre`) VALUES
+(1, 'test');
 
 -- --------------------------------------------------------
 
@@ -66,6 +73,14 @@ CREATE TABLE `editores` (
   `apellidos` varchar(50) COLLATE utf8mb4_spanish_ci NOT NULL,
   `administrador` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `editores`
+--
+
+INSERT INTO `editores` (`id`, `username`, `password`, `email`, `nombre`, `apellidos`, `administrador`) VALUES
+(1, 'test', '$argon2i$v=19$m=1024,t=2,p=2$TFlZbnMzc2VyUnVVcDFvVQ$F/XUnvveNILmr3Vo55syuNhpu0lc2jfPXD7YbGhrd3U', 'test@12345', 'Tessst', 'Test Teeeeest', 1),
+(7, 'dani', '$argon2i$v=19$m=1024,t=2,p=2$S0ZTWC5WeUxPUDdwS0VvOA$t+LAyQYs1HLSpGWo7DjPYmhbhI++9BAw8ak3PNh1rgc', '123213@dsad', 'Dani', 'Barriguita', 0);
 
 -- --------------------------------------------------------
 
@@ -105,7 +120,7 @@ CREATE TABLE `noticias_tags` (
 DROP TABLE IF EXISTS `tags`;
 CREATE TABLE `tags` (
   `id` int(11) NOT NULL,
-  `descripcion` int(11) NOT NULL
+  `nombre` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 --
@@ -117,7 +132,7 @@ CREATE TABLE `tags` (
 --
 ALTER TABLE `categorias`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `descripcion` (`descripcion`);
+  ADD UNIQUE KEY `descripcion` (`nombre`);
 
 --
 -- Indices de la tabla `comentarios`
@@ -147,14 +162,14 @@ ALTER TABLE `noticias`
 --
 ALTER TABLE `noticias_tags`
   ADD PRIMARY KEY (`noticia`,`tag`),
-  ADD KEY `tag` (`tag`);
+  ADD KEY `noticias_tags_ibfk_1` (`tag`);
 
 --
 -- Indices de la tabla `tags`
 --
 ALTER TABLE `tags`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `descripcion` (`descripcion`);
+  ADD UNIQUE KEY `descripcion` (`nombre`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -164,7 +179,7 @@ ALTER TABLE `tags`
 -- AUTO_INCREMENT de la tabla `categorias`
 --
 ALTER TABLE `categorias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `comentarios`
@@ -176,7 +191,7 @@ ALTER TABLE `comentarios`
 -- AUTO_INCREMENT de la tabla `editores`
 --
 ALTER TABLE `editores`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `noticias`
@@ -198,21 +213,21 @@ ALTER TABLE `tags`
 -- Filtros para la tabla `comentarios`
 --
 ALTER TABLE `comentarios`
-  ADD CONSTRAINT `comentarios_ibfk_1` FOREIGN KEY (`noticia`) REFERENCES `noticias` (`id`);
+  ADD CONSTRAINT `comentarios_ibfk_1` FOREIGN KEY (`noticia`) REFERENCES `noticias` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `noticias`
 --
 ALTER TABLE `noticias`
-  ADD CONSTRAINT `noticias_ibfk_1` FOREIGN KEY (`categoria`) REFERENCES `categorias` (`id`),
-  ADD CONSTRAINT `noticias_ibfk_2` FOREIGN KEY (`autor`) REFERENCES `editores` (`id`);
+  ADD CONSTRAINT `noticias_ibfk_1` FOREIGN KEY (`categoria`) REFERENCES `categorias` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `noticias_ibfk_2` FOREIGN KEY (`autor`) REFERENCES `editores` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `noticias_tags`
 --
 ALTER TABLE `noticias_tags`
-  ADD CONSTRAINT `noticias_tags_ibfk_1` FOREIGN KEY (`tag`) REFERENCES `tags` (`id`),
-  ADD CONSTRAINT `noticias_tags_ibfk_2` FOREIGN KEY (`noticia`) REFERENCES `noticias` (`id`);
+  ADD CONSTRAINT `noticias_tags_ibfk_1` FOREIGN KEY (`tag`) REFERENCES `tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `noticias_tags_ibfk_2` FOREIGN KEY (`noticia`) REFERENCES `noticias` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

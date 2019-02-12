@@ -5,19 +5,19 @@
   align-items: center;
 }
 </style>
-<nav class="navbar navbar-expand-sm navbar-dark bg-dark text-white">
-  <a class="navbar-brand">Edicción</a>
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+  <a class="navbar-brand text-white">Edicción</a>
   <button class="navbar-toggler" data-target="#navbar" data-toggle="collapse" aria-controls="navbar"
     aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div id="navbar" class="collapse navbar-collapse">
     <ul class="navbar-nav mx-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="<?php echo base_url() ?>editor">Estadísticas</a>
+      <li class="nav-item">
+        <a class="nav-link active" href="<?php echo base_url() ?>editor">Estadísticas</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="<?php echo base_url() ?>editor/">Publicar noticia</a>
+        <a class="nav-link" href="<?php echo base_url() ?>editor/publicarNoticia">Publicar noticia</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="<?php echo base_url() ?>editor/">Editiar noticias</a>

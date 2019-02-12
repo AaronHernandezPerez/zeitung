@@ -3,9 +3,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Editores_m extends CI_Model
 {
-  public function registrarEditor()
+  public function registrarEditor($datos)
   {
-    $this->db->insert('editores', $this->session->flashdata('editor'));
+    $this->db->insert('editores', $datos);
   }
 
   public function obtenerDatosLogin($username)

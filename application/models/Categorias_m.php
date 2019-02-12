@@ -16,6 +16,11 @@ class Categorias_m extends CI_Model
     return $query->row();
   }
 
+  public function obtenerCategorias()
+  {
+    $query = $this->db->get('categorias');
+    return $query->result();
+  }
 }
 
 ?>

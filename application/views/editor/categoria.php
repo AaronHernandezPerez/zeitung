@@ -10,7 +10,7 @@
         </div>
       </div>
       <div class="d-flex justify-content-center">
-        <button class="btn btn-primary">Registrar categoría</button>
+        <button class="btn btn-lg btn-dark">Registrar categoría</button>
       </div>
     </form>
   </div>
