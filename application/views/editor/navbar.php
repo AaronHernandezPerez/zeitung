@@ -14,13 +14,13 @@
   <div id="navbar" class="collapse navbar-collapse">
     <ul class="navbar-nav mx-auto">
       <li class="nav-item">
-        <a class="nav-link active" href="<?php echo base_url() ?>editor">Estadísticas</a>
+        <a class="nav-link" href="<?php echo base_url() ?>editor">Estadísticas</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="<?php echo base_url() ?>editor/publicarNoticia">Publicar noticia</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="<?php echo base_url() ?>editor/">Editiar noticias</a>
+        <a class="nav-link" href="<?php echo base_url() ?>editor/editarNoticias">Editiar noticias</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="<?php echo base_url() ?>editor/">Moderar comentarios</a>

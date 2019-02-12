@@ -2,10 +2,10 @@
   "deploy": {
     "ignore": [
       "/.vscode/*",
-      //   "/.git",
-      //   "/.htaccess",
-      //   "application/config/",
-      "remoto.bat"
+      "/.git",
+      // "/.htaccess",
+      // "/application/config/*",
+      "remoto.bat",
     ],
     "targets": [
       {
@@ -17,12 +17,15 @@
         "port": 22,
         "user": "aaronh",
         "password": "danieldasasco",
-        "checkBeforeDeploy": true,
         "mappings": [
           {
             "source": "F:/JavaScipt/zeitung",
             "target": "/home/aaronh/public_html/zeitung"
           }
+        ],
+        "connected": [
+          "rm -r /home/aaronh/public_html/zeitung/*"
+          // "find /home/aaronh/public_html/zeitung -not -path '/home/aaronh/public_html/zeitung' -not -path '*/zeitung/.htaccess' -not -path '*/zeitung/application/config*' -delete"
         ]
       }
     ]

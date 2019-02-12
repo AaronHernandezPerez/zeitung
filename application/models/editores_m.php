@@ -13,11 +13,7 @@ class Editores_m extends CI_Model
     $query = $this->db->select('id,username,administrador,password')
       ->where('username', $username)
       ->get('editores');
-    if ($result = $query->row()) {
-      return $result;
-    } else {
-      return false;
-    }
+    return $query->row();
   }
 
 }

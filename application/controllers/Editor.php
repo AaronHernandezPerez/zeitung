@@ -27,21 +27,22 @@ class Editor extends CI_Controller
     $this->load->view('template_editor', $datos);
   }
 
-  public function noticias()
-  {
-
-  }
-
   public function publicarNoticia()
   {
     $datos['titulo'] = "Editor {$_SESSION['username']}";
-    $datos['contenido'] = 'editor/publicar-noticia.php';
-    // Dtos para publicar la noticia
+
+    // Primero comprobamos que haya categorias
     $this->load->model('categorias_m');
     $datos['categorias'] = $this->categorias_m->obtenerCategorias();
-    // Libreria para el editor de texto del cuerpo de la noticia
-    $datos['miJS'] = ['js/publicar-noticias.js'];
-    $this->load->view('template_editor', $datos);
+    if (count($datos['categorias']) == 0) {
+      $datos['contenido'] = 'editor/error-noticia-publicar.php';
+      $this->load->view('template_editor', $datos);
+    } else {
+      // Libreria para el editor de texto del cuerpo de la noticia
+      $datos['contenido'] = 'editor/noticia-publicar.php';
+      $datos['miJS'] = ['js/publicar-noticias.js'];
+      $this->load->view('template_editor', $datos);
+    }
   }
 
   /**
@@ -51,6 +52,7 @@ class Editor extends CI_Controller
    */
   public function addNoticia()
   {
+    
     // Sacamos las tags del array
     $tags = explode(',', $_POST['tags']);
     unset($_POST['tags']);
@@ -63,7 +65,7 @@ class Editor extends CI_Controller
 
     // Introducimos la noticia
     $this->load->model('noticias_m');
-    $this->noticias_m->registrarNoticia($_POST);
+    $idNoticia = $this->noticias_m->registrarNoticia($_POST);
 
     // Limpiamos los tags
     foreach ($tags as $key => $value) {
@@ -72,19 +74,62 @@ class Editor extends CI_Controller
         unset($tags[$key]);
         continue;
       }
-      $tags[$key] = trim($value);
+      // Se limpia y ponemos la primera letra a mayuscula
+      $tags[$key] = $this->funciones->trimPrimLetrMayus($value);
     }
 
-    print_r($tags);
     // Introducimos sus tags
-    // $this->load->model('tags_m');
-    // foreach ($tags as $value) {
-    //   $this->tags_m->registrarTag(['nombre' => $value]);
-    // }
+    $this->load->model('tags_m');
+    foreach ($tags as $value) {
+      if (!$this->tags_m->comprobarTag($value)) {
+        # Si no existe la registramos en la tabla tags
+        $this->tags_m->registrarTag(['nombre' => $value]);
+      }
+      // Añadimos la file tags_noticias
+      $this->tags_m->registrarTag_noticia(['noticia' => $idNoticia, 'tag' => $value]);
+    }
+
+    // Volvemos con un mensaje de informacion
+    $this->alertas->add("La noticia <b>{$_POST['titulo']}</b> ha sido publicada con éxito", 'success');
+    redirect('editor/publicarNoticia');
   }
+
+  /**
+   * Si no se le pasa una id, mostrará toadas las noticias publicadas por el editor logeado,
+   * al pasarsela se rellarán los campos y tendra la opción de guardar o cancelar los cambios
+   * se comprobará que esa noticia pertenece a ese editor antes de dejarle editarla
+   * 
+   *
+   * @param string $id
+   * @return void
+   */
   public function editarNoticias($id = '')
   {
-
+    $datos['titulo'] = "Editor {$_SESSION['username']}";
+    if ($id == '') {
+      $datos['contenido'] = 'editor/noticias-seleccionar.php';
+      $this->load->model('noticias_m');
+      $datos['noticias'] = $this->noticias_m->obtenerListaNoticiasEditor($_SESSION['id']);
+      $this->load->view('template_editor', $datos);
+    } else {
+      $this->load->model('noticias_m');
+      // Comprobamos que sea su noticia si no es admin
+      if (!$_SESSION['admin'] && ($this->noticias_m->getAutor($id) != $_SESSION['id'])) {
+        die('Esa no es tu noticia');
+      }
+      // Cargamos los datos de la noticia
+      $datos['noticia'] = $this->noticias_m->obtenerNoticia($id);
+      // Comprobamos que exista la noticia
+      if ($datos['noticia']) {
+        $datos['contenido'] = 'editor/noticias-editar.php';
+        $datos['miJS'] = ['js/publicar-noticias.js'];
+        $this->load->model('tags_m');
+        $datos['tags'] = $this->funciones->soloValores($this->tags_m->obtenerTags_noticia($id)); // Cargamos las tag
+        $this->load->view('template_editor', $datos);
+      } else {
+        die('Esa no noticia no existe');
+      }
+    }
   }
 
   public function cerrarSesion()
@@ -135,8 +180,7 @@ class Editor extends CI_Controller
     } else {
       // Funcion para pasar todo el array a minusculas menos la primera letra, aunque solo hay 1 valor :>
       $_POST = array_map(function ($value) {
-        $value = strtolower($value);
-        $value = ucfirst($value);
+        $value = $this->funciones->trimPrimLetrMayus($value);
         return $value;
       }, $_POST);
       $this->categorias_m->registrarCategoria($_POST);

@@ -49,11 +49,11 @@ class Login extends CI_Controller
   public function registrarEditor()
   {
     // Primero, el usuario y el email se pasarán a minusculas
-    $_POST['username'] = strtolower($_POST['username']);
-    $_POST['email'] = strtolower($_POST['email']);
+    $_POST['username'] = $this->funciones->trimMinus($_POST['username']);
+    $_POST['email'] = $this->funciones->trimMinus($_POST['email']);
     // El nombre y los apellidos se capitalizará la primera letra de cada palabra
-    $_POST['nombre'] = ucwords(strtolower($_POST['nombre']));
-    $_POST['apellidos'] = ucwords(strtolower($_POST['apellidos']));
+    $_POST['nombre'] = $this->funciones->trimPrimLetrMayus($_POST['nombre']);
+    $_POST['apellidos'] = $this->funciones->trimPrimLetrMayus($_POST['apellidos']);
     // Por ultimo encriptamos la contraseña con Argon2
     $_POST['password'] = password_hash($_POST['password'], PASSWORD_ARGON2I);
 

@@ -1,8 +1,3 @@
-<style>
-#cuerpo {
-  min-height: 15em;
-}
-</style>
 <!-- Librerias Quill -->
 <script src="<?php echo base_url() ?>assets/libraries/quill/quill.js"></script>
 <!-- Temas de quill -->
@@ -31,7 +26,7 @@
       <div class="form-group">
         <label for="cabecera">Cabecera</label>
         <textarea id="cabecera" name="cabecera" class="form-control" maxlength="500" rows="8" required></textarea>
-        <small>Máximo 500 caracteres</small>
+        <small>Te quedan <span id="maxCabecera">500</span> caracteres</small>
       </div>
 
       <div class="form-group">

@@ -25,3 +25,10 @@ $('form:eq(0)').on('submit', function () {
   $('#cuerpoInput').val(JSON.stringify(cuerpo.root.innerHTML));
   this.submit();
 });
+
+// manejador de eventos para mostrar la longitud de la cabecera
+$('#cabecera').on('input', function () {
+  const maxlength = this.getAttribute('maxlength');
+  const diferencia = maxlength - this.value.length;
+  $('#maxCabecera').text(diferencia);
+})
