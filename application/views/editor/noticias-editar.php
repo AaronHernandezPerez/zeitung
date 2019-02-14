@@ -5,8 +5,8 @@
 
 <div class="card">
   <div class="card-body">
-    <h3 class="card-title">Edita la noticia</h3>
-    <form method="post" action="<?php echo base_url() ?>editor/editNoticia">
+    <h3 class="card-title"><?php echo $cardTitle ?></h3>
+    <form method="post" action="<?php echo base_url() ?>editor/actualizarNoticia">
       <input type="hidden" name="id" value="<?php echo $noticia->id ?>">
       <div class="form-group">
         <label for="titulo">Titulo</label>
@@ -49,7 +49,7 @@
       </div>
 
       <div class="d-flex justify-content-center">
-        <button class="btn btn-lg btn-dark">Publicar noticia</button>
+        <button class="btn btn-lg btn-dark">Editar noticia</button>
       </div>
     </form>
   </div>

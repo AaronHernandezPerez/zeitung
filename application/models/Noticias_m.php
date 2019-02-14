@@ -39,6 +39,28 @@ class Noticias_m extends CI_Model
       ->get('noticias');
     return $query->row();
   }
+
+  public function obtenerNombreAutor($idNoticia)
+  {
+    $query = $this->db->select('username')
+      ->from('editores')
+      ->join('noticias', 'editores.id = noticias.autor')
+      ->where('noticias.id', $idNoticia)
+      ->get();
+    return $query->row()->username;
+  }
+
+  public function actualizarNoticia($datos)
+  {
+    $this->db->where('id', $datos['id'])
+      ->update('noticias', $datos);
+  }
+
+
+  public function eliminarNoticia($idNoticia)
+  {
+    $this->db->delete('noticias', ['id' => $idNoticia]);
+  }
 }
 
 ?>

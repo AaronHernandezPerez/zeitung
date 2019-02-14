@@ -32,12 +32,12 @@
           aria-haspopup="true" aria-expanded="false">
           Opciones Admin
         </a>
-        <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
-          <a class="nav-link" href="<?php echo base_url() ?>editor/categoria">Añadir categoria</a>
+        <div class="dropdown-menu bg-dark px-1 px-sm-0" aria-labelledby="navbarDropdown">
+          <a class="nav-link" href="<?php echo base_url() ?>editor/categoria">Admin categorias</a>
           <div class="dropdown-divider"></div>
           <a class="nav-link" href="<?php echo base_url() ?>editor/">Admin Noticias</a>
-          <a class="nav-link" href="<?php echo base_url() ?>editor/">Admin comentarios</a>
-          <a class="nav-link" href="<?php echo base_url() ?>editor/">Admin editores</a>
+          <a class="nav-link" href="<?php echo base_url() ?>editor/">Admin Comentarios</a>
+          <a class="nav-link" href="<?php echo base_url() ?>editor/">Admin Editores</a>
         </div>
       </li>
       <?php endif; ?>

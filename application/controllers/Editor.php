@@ -52,7 +52,6 @@ class Editor extends CI_Controller
    */
   public function addNoticia()
   {
-    
     // Sacamos las tags del array
     $tags = explode(',', $_POST['tags']);
     unset($_POST['tags']);
@@ -67,7 +66,7 @@ class Editor extends CI_Controller
     $this->load->model('noticias_m');
     $idNoticia = $this->noticias_m->registrarNoticia($_POST);
 
-    // Limpiamos los tags
+    // Limpiamos los tags y eliminamos los no válidos
     foreach ($tags as $key => $value) {
       // Comprobamos si esta vacio
       if (!preg_match('/[A-z0-9]/', $value)) {
@@ -85,8 +84,10 @@ class Editor extends CI_Controller
         # Si no existe la registramos en la tabla tags
         $this->tags_m->registrarTag(['nombre' => $value]);
       }
-      // Añadimos la file tags_noticias
-      $this->tags_m->registrarTag_noticia(['noticia' => $idNoticia, 'tag' => $value]);
+      // Si no se ha añadido ya una tag igual la añadimos
+      if (!$this->tags_m->comprobarTags_noticia($idNoticia, $value)) {
+        $this->tags_m->registrarTag_noticia(['noticia' => $idNoticia, 'tag' => $value]);
+      }
     }
 
     // Volvemos con un mensaje de informacion
@@ -95,41 +96,145 @@ class Editor extends CI_Controller
   }
 
   /**
-   * Si no se le pasa una id, mostrará toadas las noticias publicadas por el editor logeado,
-   * al pasarsela se rellarán los campos y tendra la opción de guardar o cancelar los cambios
-   * se comprobará que esa noticia pertenece a ese editor antes de dejarle editarla
+   * Si no se le pasa una id, mostrará toadas las noticias publicadas por el editor logeado
    * 
    *
    * @param string $id
    * @return void
    */
-  public function editarNoticias($id = '')
+  public function editarNoticias()
   {
     $datos['titulo'] = "Editor {$_SESSION['username']}";
-    if ($id == '') {
-      $datos['contenido'] = 'editor/noticias-seleccionar.php';
-      $this->load->model('noticias_m');
-      $datos['noticias'] = $this->noticias_m->obtenerListaNoticiasEditor($_SESSION['id']);
+    $datos['contenido'] = 'editor/noticias-seleccionar.php';
+    $this->load->model('noticias_m');
+    $datos['noticias'] = $this->noticias_m->obtenerListaNoticiasEditor($_SESSION['id']);
+    $datos['miJS'] = ['js/noticias-seleccionar.js'];
+    $this->load->view('template_editor', $datos);
+  }
+
+  /**
+   * Vista para modificar los datos, los cuales se rellenarán los campos y tendrá la opción de guardar o cancelar los cambios
+   * se comprobará que esa noticia pertenece a ese editor antes de dejarle editarla
+   *
+   * @param [type] $id
+   * @return void
+   */
+  public function modificarNoticia($id)
+  {
+    // Si se ha introducido una id en la url
+    $this->load->model('noticias_m');
+    // Comprobamos que sea su noticia si no es admin
+    $autorNoticia = $this->noticias_m->getAutor($id);
+    if (!$_SESSION['admin'] && ($autorNoticia != $_SESSION['id'])) {
+      $this->alertas->add("No tienes <b>acceso</b> a esta noticia");
+      redirect('editor/editarNoticias');
+    }
+
+    // Mensaje de la tarjeta para diferenciar tus noticias de las que editas siendo admin
+    if ($autorNoticia == $_SESSION['id']) {
+      // Si eres el autor
+      $datos['cardTitle'] = 'Edita tu noticia';
+    } else {
+      // Si eres un admin editando
+      $datos['cardTitle'] = 'Editando la noticia de <b>' . $this->noticias_m->obtenerNombreAutor($id) . '</b>';
+    }
+
+    // Cargamos los datos de la noticia
+    $datos['noticia'] = $this->noticias_m->obtenerNoticia($id);
+    // Comprobamos que exista la noticia
+    if ($datos['noticia']) {
+      $datos['contenido'] = 'editor/noticias-editar.php';
+      $datos['miJS'] = ['js/publicar-noticias.js'];
+      
+      // Categorias
+      $this->load->model('categorias_m');
+      $datos['categorias'] = $this->categorias_m->obtenerCategorias();
+      // Tags
+      $this->load->model('tags_m');
+      $datos['tags'] = $this->funciones->soloValores($this->tags_m->obtenerTags_noticia($id)); // Cargamos las tag
       $this->load->view('template_editor', $datos);
     } else {
-      $this->load->model('noticias_m');
-      // Comprobamos que sea su noticia si no es admin
-      if (!$_SESSION['admin'] && ($this->noticias_m->getAutor($id) != $_SESSION['id'])) {
-        die('Esa no es tu noticia');
+      $this->alertas->add("La noticia <b>{$id}</b> no existe");
+      redirect('editor/editarNoticias');
+    }
+  }
+
+  /**
+   * Hace casi lo mismo que "addNoticia", excepto que lo modifica por los nuevos valores introducidosy elimina,
+   * las filas de tags_noticias correspondientes antes de volverlas a introducir
+   *
+   * @return void
+   */
+  public function actualizarNoticia()
+  {
+    // Sacamos las tags del array
+    $tags = explode(',', $_POST['tags']);
+    unset($_POST['tags']);
+
+    // Descodificamos el cuerpo 
+    $_POST['cuerpo'] = json_decode($_POST['cuerpo']);
+
+    // Actualizamos la noticia con los nuevos datos
+    $this->load->model('noticias_m');
+    $this->noticias_m->actualizarNoticia($_POST);
+
+    // Limpiamos los tags y eliminamos los no válidos
+    foreach ($tags as $key => $value) {
+      // Comprobamos si esta vacio
+      if (!preg_match('/[A-z0-9]/', $value)) {
+        unset($tags[$key]);
+        continue;
       }
-      // Cargamos los datos de la noticia
-      $datos['noticia'] = $this->noticias_m->obtenerNoticia($id);
-      // Comprobamos que exista la noticia
-      if ($datos['noticia']) {
-        $datos['contenido'] = 'editor/noticias-editar.php';
-        $datos['miJS'] = ['js/publicar-noticias.js'];
-        $this->load->model('tags_m');
-        $datos['tags'] = $this->funciones->soloValores($this->tags_m->obtenerTags_noticia($id)); // Cargamos las tag
-        $this->load->view('template_editor', $datos);
-      } else {
-        die('Esa no noticia no existe');
+      // Se limpia y ponemos la primera letra a mayuscula
+      $tags[$key] = $this->funciones->trimPrimLetrMayus($value);
+    }
+
+    // Eliminamos todas las filas correspondientes de "tags_noticias"
+    $this->load->model('tags_m');
+    $this->tags_m->eliminarTags_noticia($_POST['id']);
+
+    // Introducimos sus tags
+    foreach ($tags as $value) {
+      if (!$this->tags_m->comprobarTag($value)) {
+        # Si no existe la registramos en la tabla tags
+        $this->tags_m->registrarTag(['nombre' => $value]);
+      }
+      // Si no se ha añadido ya una tag igual la añadimos
+      if (!$this->tags_m->comprobarTags_noticia($_POST['id'], $value)) {
+        $this->tags_m->registrarTag_noticia(['noticia' => $_POST['id'], 'tag' => $value]);
       }
     }
+
+    // Volvemos con un mensaje de informacion
+    $this->alertas->add("La noticia <b>{$_POST['titulo']}</b> ha sido modificada con éxito", 'success');
+    redirect('editor/editarNoticias');
+  }
+
+  /**
+   * Devolverá el html de un modal con un mensaje de confirmación para borrar la noticia
+   * recibe por post el id y el titulo de la noticia
+   *
+   * @return string un modal de bootstrap
+   */
+  public function modalBorrar()
+  {
+    // Primero seleccionamos los datos para rellenar el modal
+    $this->load->model('noticias_m');
+    $_POST['autor'] = $this->noticias_m->obtenerNombreAutor($_POST['id']);
+    $this->load->view('editor/complementos/modal-borrar.php', $_POST);
+  }
+
+  /**
+   * Funcion llamada desde el modal de borrar, simplemente eliminará la noticia
+   * y devolverá una alerta de bootstrap formateada
+   *
+   * @return void
+   */
+  public function eliminarNoticia()
+  {
+    $this->load->model('noticias_m');
+    $this->noticias_m->eliminarNoticia($_POST['id']);
+    $this->load->view('editor/complementos/alerta-borrar.php', $_POST);
   }
 
   public function cerrarSesion()
@@ -140,7 +245,6 @@ class Editor extends CI_Controller
 
 
   ### Metodos solo para el admin
-
 
   private function comprobarAdmin()
   {
@@ -161,6 +265,9 @@ class Editor extends CI_Controller
     $this->comprobarAdmin();
     $datos['titulo'] = "Editor {$_SESSION['username']}";
     $datos['contenido'] = 'editor/categoria.php';
+    // Categorias
+    $this->load->model('categorias_m');
+    $datos['categorias'] = $this->categorias_m->obtenerCategorias();
     $this->load->view('template_editor', $datos);
   }
 
@@ -186,6 +293,25 @@ class Editor extends CI_Controller
       $this->categorias_m->registrarCategoria($_POST);
       $this->alertas->add("La categoria <b>{$_POST['nombre']}</b> ha sido añadida con éxito", 'success');
     }
+    redirect('editor/categoria');
+  }
+
+  /**
+   * Cambia el nombre de la categoria al nuevo valor introducido y redirecciona a /editor/categorias,
+   *  con un mensaje de informacion
+   *
+   * @return void
+   */
+  public function actualizarCategoria()
+  {
+    // Realizamos un update de categorias
+    $this->load->model('categorias_m');
+    // Formateamos el nuevo nombre de la categoria y lo actualizamos
+    $_POST['nombre'] = $this->funciones->trimPrimLetrMayus($_POST['nombre']);
+    $this->categorias_m->actualizarCategoria($_POST);
+
+    // Redireccionamos con un mensaje de información
+    $this->alertas->add("La categoria <b>{$_POST['nombre']}</b> ha sido modificada con éxito", 'success');
     redirect('editor/categoria');
   }
 
