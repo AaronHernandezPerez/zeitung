@@ -2,7 +2,7 @@
 <div class="col-md-4">
 
   <!-- Widget de búsqueda -->
-  <div class="card my-4">
+  <div class="card">
     <h5 class="card-header">Búsqueda</h5>
     <div class="card-body">
       <div class="input-group">

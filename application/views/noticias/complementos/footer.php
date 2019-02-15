@@ -1,4 +1,4 @@
-<div class="d-flex justify-content-around">
+<div class="d-flex justify-content-around mt-4 bg-dark text-white">
   <div>
     Contactar
   </div>

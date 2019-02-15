@@ -9,7 +9,7 @@
     <form method="post" action="<?php echo base_url() ?>editor/addNoticia">
       <div class="form-group">
         <label for="titulo">Titulo</label>
-        <input autofocus type="text" class="form-control" id="titulo" name="titulo" placeholder="ej Algo" maxlength="100"
+        <input autofocus type="text" class="form-control" id="titulo" name="titulo" placeholder="ej Algo" maxlength="150"
           required>
       </div>
 

@@ -10,8 +10,8 @@
       <input type="hidden" name="id" value="<?php echo $noticia->id ?>">
       <div class="form-group">
         <label for="titulo">Titulo</label>
-        <input autofocus value="<?php echo $noticia->titulo ?>" type="text" class="form-control" id="titulo"
-          name="titulo" maxlength="100" required>
+        <input autofocus value='<?php echo $noticia->titulo ?>' type="text" class="form-control" id="titulo"
+          name="titulo" maxlength="150" required>
       </div>
 
       <div class="form-group">

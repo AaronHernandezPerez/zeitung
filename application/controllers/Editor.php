@@ -60,7 +60,7 @@ class Editor extends CI_Controller
     $_POST['cuerpo'] = json_decode($_POST['cuerpo']);
     // Añadimos la id y la fecha
     $_POST['autor'] = $_SESSION['id'];
-    $_POST['fecha'] = date('Y-m-d');
+    $_POST['fecha'] = date('Y-m-d H:i:s');
 
     // Introducimos la noticia
     $this->load->model('noticias_m');

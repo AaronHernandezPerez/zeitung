@@ -100,7 +100,8 @@ class Noticias_m extends CI_Model
   }
 
   /**
-   * Obtiene las noticias de la categoria, siendo la categoria su nombre,
+   * Obtiene las noticias de la categoria, siendo la categoria su nombre, ordenada de forma descendente
+   * Este metodo es le que se llama para ver el listado de las noticias en el controlado noticias
    *
    * @param string $categoria
    * @param string $limite

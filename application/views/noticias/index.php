@@ -8,16 +8,18 @@
 
       <?php foreach ($noticias as $value) : ?>
       <!-- Blog Post -->
-      <div class="card mb-4">
+      <div class="card mb-3">
         <div class="card-body">
-          <h2 class="card-title"><?= $value->titulo ?> </h2>
+          <h2 class="card-title ">
+            <a href="<?= base_url() ?>noticias/leer/<?= $value->id ?>" class="text-dark"><?= $value->titulo ?></a>
+          </h2>
           <p class="card-text"><?= $value->cabecera ?> </p>
-          <a href="<?= base_url() ?>noticias/leer/<?= $value->id ?>" class="btn btn-primary">Leer mas &rarr;</a>
+          <!-- <a href="<?= base_url() ?>noticias/leer/<?= $value->id ?>" class="btn btn-primary">Leer mas &rarr;</a> -->
         </div>
-        <div class="card-footer text-muted">
+        <!-- <div class="card-footer text-muted">
           Publicada el <?= $value->fecha ?> Por
           <a href="#"><?= $value->nombre ?> </a>
-        </div>
+        </div> -->
       </div>
       <?php endforeach; ?>
 
