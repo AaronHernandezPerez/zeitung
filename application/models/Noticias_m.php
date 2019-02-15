@@ -16,14 +16,35 @@ class Noticias_m extends CI_Model
   }
 
 
-  public function obtenerListaNoticiasEditor($idautor)
+  public function obtenerListaNoticiasEditor($idautor, $limite = '', $offset = '')
   {
     $query = $this->db->select('id,titulo,fecha')
       ->where('autor', $idautor)
-      ->get('noticias');
+      ->get('noticias', $limite, $offset);
     return $query->result();
   }
 
+  public function obtenerNumeroNoticiasEditor($idautor)
+  {
+    return $this->db->where('autor', $idautor)
+      ->count_all_results('noticias');
+  }
+
+  public function obtenerNumeroNoticiasCategoria($nombreCategoria)
+  {
+    return $this->db->select('*')
+      ->from('noticias')
+      ->join('categorias', 'noticias.categoria = categorias.id')
+      ->like('categorias.nombre', $nombreCategoria)
+      ->count_all_results();
+  }
+
+  /**
+   * Obtiene el autor de una noticia
+   *
+   * @param int $idnoticia
+   * @return void
+   */
   public function getAutor($idnoticia)
   {
     $query = $this->db->select('autor')
@@ -36,6 +57,15 @@ class Noticias_m extends CI_Model
   {
     $query = $this->db->select('id,categoria,titulo,cabecera,cuerpo')
       ->where('id', $idnoticia)
+      ->get('noticias');
+    return $query->row();
+  }
+
+  public function obtenerNoticiaNombre($idnoticia)
+  {
+    $query = $this->db->select('noticias.*,editores.username nombre')
+      ->join('editores', 'noticias.autor = editores.id')
+      ->where('noticias.id', $idnoticia)
       ->get('noticias');
     return $query->row();
   }
@@ -60,6 +90,33 @@ class Noticias_m extends CI_Model
   public function eliminarNoticia($idNoticia)
   {
     $this->db->delete('noticias', ['id' => $idNoticia]);
+  }
+
+  public function obtenerIdAutores()
+  {
+    return $this->db->select('autor')
+      ->group_by('autor')
+      ->get('noticias')->result();
+  }
+
+  /**
+   * Obtiene las noticias de la categoria, siendo la categoria su nombre,
+   *
+   * @param string $categoria
+   * @param string $limite
+   * @param string $offset
+   * @return void
+   */
+  public function obtenerNoticiasPorNombreCat($categoria = '', $limite = '', $offset = '')
+  {
+    return $this->db->select('noticias.id,noticias.autor,noticias.titulo,noticias.cabecera,noticias.fecha,editores.username nombre')
+      ->from('noticias')
+      ->join('categorias', 'noticias.categoria = categorias.id')
+      ->join('editores', 'noticias.autor = editores.id')
+      ->like('categorias.nombre', $categoria)
+      ->order_by('fecha', 'DESC')
+      ->limit($limite, $offset)
+      ->get()->result();
   }
 }
 

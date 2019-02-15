@@ -1,46 +1,26 @@
 <style>
-.thead {
-  border-bottom: 3px solid #32383e;
-  font-weight: bold;
+.pagination>li>a {
+  color: #212529;
 }
 
-.bt {
-  border-top: 1px solid #32383e;
+.pagination>li>a:focus,
+.pagination>li>a:hover,
+.pagination>li>span:focus,
+.pagination>li>span:hover {
+  color: #212529;
 }
 
-.filaNoticias {
-  background-color: #212529;
-  margin: 0 .02em;
-  color: white;
+.pagination>.active>a {
+  background-color: #212529 !important;
+  border: solid 1px #212529 !important;
 }
 
-.filaNoticias a {
-  color: white !important;
-  display: flex;
-  align-items: center;
-  height: 100%;
-}
-
-.filaNoticias a:hover {
-  color: red;
-  background-color: rgba(255, 255, 255, .05);
-
-  text-decoration: none;
-}
-
-#alertas {
-  position: fixed;
-  bottom: 0%;
-  left: 50%;
-  width: 50%;
-  padding: 0 1em;
-  z-index: 9999;
-}
-
-.modal-dialog {
-  margin-top: 15%;
+.pagination>.active>a:hover {
+  background-color: #171a1c !important;
+  border: solid 1px #171a1c !important;
 }
 </style>
+
 <div class="card">
   <div class="card-body">
     <h3 class="card-title">Tus noticias</h3>
@@ -70,6 +50,10 @@
     </div> <!-- Fin row -->
     <?php endforeach ?>
 
+    <!-- Paginacion de las noticias -->
+    <div class="d-flex justify-content-center mt-3">
+      <?php echo $this->pagination->create_links(); ?>
+    </div>
   </div>
 </div>
 

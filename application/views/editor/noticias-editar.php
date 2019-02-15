@@ -10,8 +10,8 @@
       <input type="hidden" name="id" value="<?php echo $noticia->id ?>">
       <div class="form-group">
         <label for="titulo">Titulo</label>
-        <input value="<?php echo $noticia->titulo ?>" type="text" class="form-control" id="titulo" name="titulo"
-          maxlength="100" required>
+        <input autofocus value="<?php echo $noticia->titulo ?>" type="text" class="form-control" id="titulo"
+          name="titulo" maxlength="100" required>
       </div>
 
       <div class="form-group">
@@ -44,12 +44,15 @@
       <div class="form-group">
         <!-- mal, tiene que ser datalist y añadir a un arrayt hidden de tags, o no tan hidden mostrar algo y la posibilidad de quitarlo, si no existe se añade al enviar -->
         <label for="tags">Tags</label>
-        <input id="tags" name="tags" class="form-control" type="text" value="<?php echo implode(', ', $tags) ?>">
+        <input id="tags" name="tags" class="form-control" type="text" value="<?php echo implode(', ', $tags) ?>"
+          required>
         <small>Introduce las tags separadas por comas.</small>
       </div>
 
-      <div class="d-flex justify-content-center">
+      <div class="d-flex justify-content-around">
         <button class="btn btn-lg btn-dark">Editar noticia</button>
+        <a href="<?= base_url() . 'editor/' . $volver ?>" class="btn btn-lg btn-dark">Cancelar</a>
+
       </div>
     </form>
   </div>

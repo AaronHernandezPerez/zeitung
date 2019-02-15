@@ -22,6 +22,13 @@ class Categorias_m extends CI_Model
     return $query->result();
   }
 
+  public function obtenerNombreCategoriasArr()
+  {
+    $query = $this->db->select('nombre')
+      ->get('categorias');
+    return $query->result_array();
+  }
+
   public function actualizarCategoria($datos)
   {
     $this->db->set('nombre', $datos['nombre'])

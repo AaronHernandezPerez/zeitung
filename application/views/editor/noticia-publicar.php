@@ -9,7 +9,7 @@
     <form method="post" action="<?php echo base_url() ?>editor/addNoticia">
       <div class="form-group">
         <label for="titulo">Titulo</label>
-        <input type="text" class="form-control" id="titulo" name="titulo" placeholder="ej Algo" maxlength="100"
+        <input autofocus type="text" class="form-control" id="titulo" name="titulo" placeholder="ej Algo" maxlength="100"
           required>
       </div>
 
@@ -38,7 +38,7 @@
       <div class="form-group">
         <!-- mal, tiene que ser datalist y añadir a un arrayt hidden de tags, o no tan hidden mostrar algo y la posibilidad de quitarlo, si no existe se añade al enviar -->
         <label for="tags">Tags</label>
-        <input id="tags" name="tags" class="form-control" type="text">
+        <input id="tags" name="tags" class="form-control" type="text" required>
         <small>Introduce las tags separadas por comas.</small>
       </div>
 

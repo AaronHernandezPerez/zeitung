@@ -96,9 +96,7 @@ class Editor extends CI_Controller
   }
 
   /**
-   * Si no se le pasa una id, mostrará toadas las noticias publicadas por el editor logeado
-   * 
-   *
+   * Muestra las noticias para el usuario logeado
    * @param string $id
    * @return void
    */
@@ -107,8 +105,21 @@ class Editor extends CI_Controller
     $datos['titulo'] = "Editor {$_SESSION['username']}";
     $datos['contenido'] = 'editor/noticias-seleccionar.php';
     $this->load->model('noticias_m');
-    $datos['noticias'] = $this->noticias_m->obtenerListaNoticiasEditor($_SESSION['id']);
+    // Valores para la query 'obtenerListaNoticiasEditor'
+    $limite = 5;
+    $offset = $this->uri->segment(3, 0);
+    $datos['noticias'] = $this->noticias_m->obtenerListaNoticiasEditor($_SESSION['id'], $limite, $offset);
+    // $datos['noticias'] = $this->noticias_m->obtenerListaNoticiasEditor($_SESSION['id']);
     $datos['miJS'] = ['js/noticias-seleccionar.js'];
+    $datos['miCSS'] = 'noticias-seleccionar.css';
+    
+    // Cargamos la paginación
+    $this->load->library('pagination');
+    $totalNoticias = $this->noticias_m->obtenerNumeroNoticiasEditor($_SESSION['id']);
+    $cfgPaginacion = $this->funciones->cfgPaginacion('editor/editarNoticias/', $totalNoticias, $limite); // Cargamos la configuracion de la paginacion
+    $this->pagination->initialize($cfgPaginacion);
+
+    // Cargamos la vista
     $this->load->view('template_editor', $datos);
   }
 
@@ -121,6 +132,11 @@ class Editor extends CI_Controller
    */
   public function modificarNoticia($id)
   {
+    // Guardamos desde donde se ha entrado
+    $referer = explode('/', $_SERVER['HTTP_REFERER']);
+    $_SESSION['volver'] = array_pop($referer);
+    $datos['volver'] = $_SESSION['volver'];
+
     // Si se ha introducido una id en la url
     $this->load->model('noticias_m');
     // Comprobamos que sea su noticia si no es admin
@@ -152,9 +168,11 @@ class Editor extends CI_Controller
       // Tags
       $this->load->model('tags_m');
       $datos['tags'] = $this->funciones->soloValores($this->tags_m->obtenerTags_noticia($id)); // Cargamos las tag
+      $datos['titulo'] = "Editor {$_SESSION['username']}";
       $this->load->view('template_editor', $datos);
     } else {
       $this->alertas->add("La noticia <b>{$id}</b> no existe");
+      unset($_SESSION['volver']);
       redirect('editor/editarNoticias');
     }
   }
@@ -207,14 +225,17 @@ class Editor extends CI_Controller
 
     // Volvemos con un mensaje de informacion
     $this->alertas->add("La noticia <b>{$_POST['titulo']}</b> ha sido modificada con éxito", 'success');
-    redirect('editor/editarNoticias');
+
+    // Redireccionamos a volver y la borramos, esta var ha sido declarada en modificarNoticia
+    redirect('editor/' . $_SESSION['volver']);
+    unset($_SESSION['volver']);
   }
 
   /**
    * Devolverá el html de un modal con un mensaje de confirmación para borrar la noticia
    * recibe por post el id y el titulo de la noticia
    *
-   * @return string un modal de bootstrap
+   * @return html un modal de bootstrap
    */
   public function modalBorrar()
   {
@@ -228,7 +249,7 @@ class Editor extends CI_Controller
    * Funcion llamada desde el modal de borrar, simplemente eliminará la noticia
    * y devolverá una alerta de bootstrap formateada
    *
-   * @return void
+   * @return html alerta de bootstrap
    */
   public function eliminarNoticia()
   {
@@ -315,4 +336,34 @@ class Editor extends CI_Controller
     redirect('editor/categoria');
   }
 
+  /**
+   * Muestra todas las noticias de todos los usuarios, incluidos los admin
+   *
+   * @return void
+   */
+  public function adminNoticias()
+  {
+    $datos['titulo'] = "Editor {$_SESSION['username']}";
+    $datos['contenido'] = 'editor/admin-noticias-seleccionar.php';
+
+    $this->load->model('noticias_m');
+    // Introduciremos en un array asociativo las noticias de cada editor
+    // De la forma 'usernameEditor'=> array(ObjetoNoticia);
+    $autores = $this->noticias_m->obtenerIdAutores();
+    $datos['noticias'] = array(); // Preparamos el array de noticias
+    $this->load->model('editores_m');
+    foreach ($autores as $value) {
+      // Por cada autor obtenemos su nombre y lo asociamos en un array con sus noticias
+      $nombre = $this->editores_m->obtenerUsername($value->autor);
+      $datos['noticias'][$nombre] = $this->noticias_m->obtenerListaNoticiasEditor($value->autor);
+    }
+    $datos['miJS'] = ['js/noticias-seleccionar.js'];
+    $datos['miCSS'] = 'noticias-seleccionar.css';
+    $this->load->view('template_editor', $datos);
+  }
+
+  public function adminEditores()
+  {
+  # code...
+  }
 }
