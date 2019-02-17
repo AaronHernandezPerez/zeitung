@@ -1,26 +1,3 @@
-<style>
-.pagination>li>a {
-  color: #212529;
-}
-
-.pagination>li>a:focus,
-.pagination>li>a:hover,
-.pagination>li>span:focus,
-.pagination>li>span:hover {
-  color: #212529;
-}
-
-.pagination>.active>a {
-  background-color: #212529 !important;
-  border: solid 1px #212529 !important;
-}
-
-.pagination>.active>a:hover {
-  background-color: #171a1c !important;
-  border: solid 1px #171a1c !important;
-}
-</style>
-
 <div class="card">
   <div class="card-body">
     <h3 class="card-title">Tus noticias</h3>
@@ -31,6 +8,11 @@
       <div class="col-6 col-sm-2 col-md-1 d-flex justify-content-end">Eliminar</div>
     </div> <!-- Fin row -->
 
+    <div class="filaNoticias thead d-flex justify-content-around">
+      <div class="flex-grow-1">Titulo</div>
+      <div class="px-1 fecha">Fecha</div>
+      <div class="px-1">Eliminar</div>
+    </div> <!-- Fin row -->
     <!-- Tabla con divs -->
     <?php foreach ($noticias as $value) : ?>
     <div class="filaNoticias row bt">
@@ -40,7 +22,7 @@
       </div>
 
       <div class="col-6 col-sm-3 col-lg-2 d-flex align-items-center">
-        <?php echo $value->fecha ?>
+        <?= date('d-m-Y', strtotime($value->fecha)) ?>
       </div>
 
       <div class="col-6 col-sm-2 col-md-1 d-flex justify-content-end">

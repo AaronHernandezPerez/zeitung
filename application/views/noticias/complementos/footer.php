@@ -132,15 +132,18 @@
   </div>
 </div>
 
-<div class="d-flex justify-content-around mt-4 bg-dark text-white p-1">
+<div class="d-flex justify-content-around mt-4 bg-white p-1">
   <div>
-    <a href="" data-toggle="modal" data-target="#modalContacto">Contactar</a>
+    <a href="" class="enlacesF" data-toggle="modal" data-target="#modalContacto">Contactar</a>
   </div>
   <div>
-    <a href="" data-toggle="modal" data-target="#modalPrivacidad">Política de privacidad</a>
+    <a href="" class="enlacesF" data-toggle="modal" data-target="#modalPrivacidad">Política de privacidad</a>
   </div>
   <div>
-    <a href="" data-toggle="modal" data-target="#modalCookies">Política de cookies</a>
+    <a href="" class="enlacesF" data-toggle="modal" data-target="#modalCookies">Política de cookies</a>
+  </div>
+  <div>
+    <a href="<?= base_url() ?>login" class="enlacesF">Trabaja con nosotros</a>
   </div>
   <div>
     Aarón Hernández Pérez ©, Todos los derechos reservados.

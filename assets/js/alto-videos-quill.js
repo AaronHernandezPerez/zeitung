@@ -6,7 +6,6 @@ $(function () {
     $('.ql-video').each(function () {
       $(this).attr('height', altoVideo(this));
     });
-    console.log('jaja');
   });
 });
 

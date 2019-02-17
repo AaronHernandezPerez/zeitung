@@ -20,6 +20,7 @@ class Noticias_m extends CI_Model
   {
     $query = $this->db->select('id,titulo,fecha')
       ->where('autor', $idautor)
+      ->order_by('id', 'DESC')
       ->get('noticias', $limite, $offset);
     return $query->result();
   }

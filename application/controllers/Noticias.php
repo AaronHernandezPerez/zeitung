@@ -23,7 +23,6 @@ class Noticias extends CI_Controller
   {
     $datos['titulo'] = "Zeitung, el peridico de cada dia.";
     $datos['contenido'] = 'noticias/index.php';
-    $datos['miCSS'] = 'noticias.css';
     // Cargamos las categorias
     $this->load->model('categorias_m');
     $categorias = $this->funciones->soloValores($this->categorias_m->obtenerNombreCategoriasArr());
@@ -69,7 +68,6 @@ class Noticias extends CI_Controller
     setlocale(LC_ALL, 'es_ES');
     $datos['titulo'] = "Zeitung, el peridico de cada dia.";
     $datos['contenido'] = 'noticias/leer.php';
-    $datos['miCSS'] = 'noticias.css';
     $datos['miJS'] = ['js/alto-videos-quill.js', 'js/add-comentarios.js'];
     $this->load->model('categorias_m');
     $categorias = $this->funciones->soloValores($this->categorias_m->obtenerNombreCategoriasArr());

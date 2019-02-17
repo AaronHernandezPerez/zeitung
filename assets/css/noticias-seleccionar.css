@@ -26,6 +26,10 @@
   text-decoration: none;
 }
 
+.fecha {
+  min-width: 100px;
+}
+
 #alertas {
   position: fixed;
   bottom: 0%;
@@ -37,4 +41,22 @@
 
 .modal-dialog {
   margin-top: 15%;
+}
+
+.pagination>li>a {
+  color: #212529;
+}
+
+.pagination>li>a:focus, .pagination>li>a:hover, .pagination>li>span:focus, .pagination>li>span:hover {
+  color: #212529;
+}
+
+.pagination>.active>a {
+  background-color: #212529 !important;
+  border: solid 1px #212529 !important;
+}
+
+.pagination>.active>a:hover {
+  background-color: #171a1c !important;
+  border: solid 1px #171a1c !important;
 }

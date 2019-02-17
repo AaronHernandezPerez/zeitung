@@ -7,8 +7,9 @@ $this->load->view('noticias/complementos/navbar.php');
 /* Estilo para que el footer este al final */
 html,
 body {
-  height: calc(100% - 4em);
+  height: calc(100% - 5em);
   margin-top: 1.5em;
+  background-color: #F5F5F5;
 }
 
 #contenedor {

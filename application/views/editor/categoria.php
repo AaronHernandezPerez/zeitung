@@ -5,7 +5,7 @@
       <div class="form-group row">
         <label for="nombre" class="col-sm-3 col-form-label">Categoria</label>
         <div class="col-sm-9">
-          <input maxlenght="100" type="text" class="form-control" id="nombre" name="nombre" placeholder="ej. Tecnología"
+          <input required maxlenght="100" type="text" class="form-control" id="nombre" name="nombre" placeholder="ej. Tecnología"
             autofocus>
         </div>
       </div>
@@ -28,7 +28,7 @@
 
         <div class="form-group col-md-6">
           <label for="nombre">Nuevo nombre</label>
-          <input maxlenght="100" type="text" class="form-control" id="nombre" name="nombre" placeholder="ej. Tecnología"
+          <input required maxlength="100" type="text" class="form-control" id="nombre" name="nombre" placeholder="ej. Tecnología"
             autofocus>
         </div>
       </div>
