@@ -61,9 +61,15 @@ class Noticias_m extends CI_Model
     return $query->row();
   }
 
+  /**
+   * Devuelve todos los paratados de las noticias, y el nombre completo del autor
+   *
+   * @param [type] $idnoticia
+   * @return void
+   */
   public function obtenerNoticiaNombre($idnoticia)
   {
-    $query = $this->db->select('noticias.*,editores.username nombre')
+    $query = $this->db->select('noticias.*,CONCAT(editores.nombre," ",editores.apellidos) nombre')
       ->join('editores', 'noticias.autor = editores.id')
       ->where('noticias.id', $idnoticia)
       ->get('noticias');

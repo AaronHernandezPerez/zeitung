@@ -7,12 +7,21 @@ $this->load->view('noticias/complementos/navbar.php');
 /* Estilo para que el footer este al final */
 html,
 body {
-  height: calc(100% - 56px);
-  margin-top: 2em;
+  height: calc(100% - 4em);
+  margin-top: 1.5em;
 }
 
 #contenedor {
   min-height: calc(100%);
+}
+
+.ql-video {
+  width: 100%;
+}
+
+
+img[src^="data:"] {
+  width: 100%;
 }
 </style>
 <!-- Inicio del contenido -->

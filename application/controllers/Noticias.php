@@ -41,9 +41,6 @@ class Noticias extends CI_Controller
     $this->load->library('pagination');
     // Cargamos las noticias 
 
-    // echo ('<h1>' . $categoria . '</h1>');
-    // echo ('<h1>Offset :' . $offset . '</h1>');
-
     $totalNoticias = $this->noticias_m->obtenerNumeroNoticiasCategoria($categoria);
     $datos['noticias'] = $this->noticias_m->obtenerNoticiasPorNombreCat($categoria, $limite, $offset);
 
@@ -61,12 +58,19 @@ class Noticias extends CI_Controller
     $this->load->view('template_noticias', $datos);
   }
 
+  /**
+   * Muestra la noticia pasada por post con sus comentarios
+   *
+   * @param [type] $idNoticia
+   * @return void
+   */
   public function leer($idNoticia)
   {
+    setlocale(LC_ALL, 'es_ES');
     $datos['titulo'] = "Zeitung, el peridico de cada dia.";
     $datos['contenido'] = 'noticias/leer.php';
     $datos['miCSS'] = 'noticias.css';
-
+    $datos['miJS'] = ['js/alto-videos-quill.js', 'js/add-comentarios.js'];
     $this->load->model('categorias_m');
     $categorias = $this->funciones->soloValores($this->categorias_m->obtenerNombreCategoriasArr());
     $datos['categorias'] = $categorias;
@@ -75,6 +79,24 @@ class Noticias extends CI_Controller
     $this->load->model('noticias_m');
     $datos['noticia'] = $this->noticias_m->obtenerNoticiaNombre($idNoticia);
 
+    // Cargamos los comentarios para esa noticia
+    $this->load->model('comentarios_m');
+    $datos['comentarios'] = $this->comentarios_m->obtenerComentariosNoticia($idNoticia);
+
     $this->load->view('template_noticias', $datos);
+  }
+
+
+  /**
+   * Funcion llamda por formulario, en la que se pasara por POST
+   * la noticia y todos los datos del comentario
+   *
+   * @return void
+   */
+  public function addComentario()
+  {
+    $this->load->model('comentarios_m');
+    $this->comentarios_m->registrarComentario($_POST);
+    echo ('Comentario añadido');
   }
 }

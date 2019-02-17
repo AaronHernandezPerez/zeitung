@@ -9,6 +9,8 @@
   <link href="<?php echo base_url() ?>assets/libraries/fontawesome/css/all.css" rel="stylesheet">
   <!-- Css de bootstrap -->
   <link href="<?php echo base_url() ?>assets/libraries/bootstrap/bootstrap.css" rel="stylesheet">
+  <!-- Clases para todos -->
+  <link href="<?php echo base_url() ?>assets/css/template.css" rel="stylesheet">
   <?php if (isset($miCSS)) : ?>
   <!-- Mi css -->
   <link href="<?php echo base_url() ?>assets/css/<?php echo $miCSS ?>" rel="stylesheet">

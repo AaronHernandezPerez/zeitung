@@ -1,8 +1,8 @@
 <!-- Sidebar Widget -->
-<div class="col-md-4">
+<div class="col-md-4 mt-5 mt-lg-0">
 
   <!-- Widget de búsqueda -->
-  <div class="card">
+  <div class="card rounded-0 shadow-sm">
     <h5 class="card-header">Búsqueda</h5>
     <div class="card-body">
       <div class="input-group">
@@ -15,7 +15,7 @@
   </div>
 
   <!-- Widget de tags -->
-  <div class="card my-4">
+  <div class="card rounded-0 shadow-sm my-4">
     <h5 class="card-header">Tags</h5>
     <div class="card-body">
       <div class="row">
@@ -63,6 +63,3 @@
 
 </div>
 <!-- Fin row -->
-
-</div>
-<!-- fin container -->

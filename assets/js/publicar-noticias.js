@@ -8,6 +8,7 @@ var toolbarOptions = [
   ['blockquote', 'code-block'],
   [{ 'indent': '-1' }, { 'indent': '+1' }],
   [{ 'script': 'sub' }, { 'script': 'super' }],
+  ['link', 'image', 'video', 'formula'],
   ['clean']
 ];
 
@@ -31,4 +32,4 @@ $('#cabecera').on('input', function () {
   const maxlength = this.getAttribute('maxlength');
   const diferencia = maxlength - this.value.length;
   $('#maxCabecera').text(diferencia);
-})
+});

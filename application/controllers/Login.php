@@ -25,7 +25,6 @@ class Login extends CI_Controller
     $datos['contenido'] = 'login/login.php';
     // Ubicaciones de los archivos CSS y JS
     // $datos['miCSS'] = '';
-    $datos['alertas'] = $this->alertas->show();
     $this->load->view('template_login', $datos);
   }
 
@@ -38,6 +37,7 @@ class Login extends CI_Controller
   {
     $datos['titulo'] = 'Registro de Periodista';
     $datos['contenido'] = 'login/registro.php';
+    $datos['miJS'] = ['js/registro.js'];
     $this->load->view('template_login', $datos);
   }
 
@@ -59,6 +59,10 @@ class Login extends CI_Controller
 
     // Importamoos el modelo y lo llamamos con los datos guardados
     $this->load->model('editores_m');
+    // print_r($_POST);
+    // die;
+    // Eliminamos el valor del captcha-response antes de registrarlo
+    unset($_POST['g-recaptcha-response']);
     $this->editores_m->registrarEditor($_POST);
     
     // Iniciamos sesión
@@ -118,6 +122,25 @@ class Login extends CI_Controller
       } else {
         $_SESSION['admin'] = false;
       }
+    }
+  }
+
+  /**
+   * Funcion para validar los campos del registro pasados por POST
+   *
+   * @return 1 si son válidos 0 en caso contrariom se considera válido si no está en la BBDD
+   */
+  public function validacionesR()
+  {
+    $this->load->model('editores_m');
+
+      // Cualquier valor menos el email
+    if ($test = $this->editores_m->validacionesR($_POST['campo'], $_POST['valor'])) {
+        // Si está en la BBDD
+      echo (0);
+    } else {
+        // Si no esta en la BBDD
+      echo (1);
     }
   }
 }
