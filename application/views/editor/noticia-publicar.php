@@ -3,14 +3,14 @@
 <!-- Temas de quill -->
 <link href="<?php echo base_url() ?>assets/libraries/quill/quill.snow.css" rel="stylesheet">
 
-<div class="card">
+<div class="card shadow">
   <div class="card-body">
     <h3 class="card-title">Publicar Noticia</h3>
     <form method="post" action="<?php echo base_url() ?>editor/addNoticia">
       <div class="form-group">
         <label for="titulo">Titulo</label>
-        <input autofocus type="text" class="form-control" id="titulo" name="titulo" placeholder="ej Algo" maxlength="150"
-          required>
+        <input autofocus type="text" class="form-control" id="titulo" name="titulo" placeholder="ej Algo"
+          maxlength="150" required>
       </div>
 
       <div class="form-group">

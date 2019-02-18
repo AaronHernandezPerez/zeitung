@@ -1,3 +1,9 @@
+<style>
+#cuerpo img {
+  width: 100%;
+}
+</style>
+
 <!-- Contenido -->
 <div class="row">
 
@@ -18,7 +24,9 @@
       <!-- Cabecera de la noticia -->
       <p class="lead"><?= $noticia->cabecera ?> </p>
       <!-- Cuerpo de la noticia -->
-      <?= $noticia->cuerpo ?>
+      <div id="cuerpo">
+        <?= $noticia->cuerpo ?>
+      </div>
     </div>
 
     <!-- Formulario de opiniones -->

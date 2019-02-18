@@ -1,35 +1,3 @@
-.thead {
-  border-bottom: 3px solid #32383e;
-  font-weight: bold;
-}
-
-.bt {
-  border-top: 1px solid #32383e;
-}
-
-.filaNoticias {
-  background-color: #212529;
-  margin: 0 .02em;
-  color: white;
-}
-
-.filaNoticias a {
-  color: white !important;
-  display: flex;
-  align-items: center;
-  height: 100%;
-}
-
-.filaNoticias a:hover {
-  color: red;
-  background-color: rgba(255, 255, 255, .05);
-  text-decoration: none;
-}
-
-.fecha {
-  min-width: 100px;
-}
-
 #alertas {
   position: fixed;
   bottom: 0%;
@@ -37,6 +5,30 @@
   width: 50%;
   padding: 0 1em;
   z-index: 9999;
+  pointer-events: none;
+}
+
+#alertas * {
+  pointer-events: all;
+}
+
+th {
+  text-align: center;
+}
+
+td {
+  padding: 0 !important;
+  margin: 0 !important;
+  height: 100%;
+}
+
+td:nth-child(2) {
+  text-align: center;
+}
+
+.enlaceTitulo {
+  display: block;
+  color: white !important;
 }
 
 .modal-dialog {

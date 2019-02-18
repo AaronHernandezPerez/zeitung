@@ -1,18 +1,51 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
+
+/**
+ * Clase con funciones de apoyo para toda la aplicación
+ */
 class Funciones
 {
 
+  /**
+   * Pone a mayusculas la primera letra de la string y quita los espacios en blanco
+   *
+   * @param [type] $valor
+   * @return void
+   */
   public function trimPrimLetrMayus($valor)
   {
-    return ucfirst(strtolower(trim($valor)));
+    return ucfirst(mb_strtolower(trim($valor)));
   }
 
+  /**
+   * Pone a mayusculas la primera letra de cada palabra y quita los espacios en blanco
+   *
+   * @param string $valor
+   * @return string
+   */
+  public function trimPrimPalbMayus($valor)
+  {
+    return mb_convert_case(mb_strtolower(trim($valor)), MB_CASE_TITLE);
+  }
+
+  /**
+   * Pone a minuscula y quita los espacios
+   *
+   * @param string $valor
+   * @return string
+   */
   public function trimMinus($valor)
   {
-    return strtolower(trim($valor));
+    return mb_strtolower(trim($valor));
   }
 
+  /**
+   * Recorre un array y devuelve solo sus valores
+   *
+   * @param array $array
+   * @return array
+   */
   public function soloValores($array)
   {
     $arr = array();
@@ -69,7 +102,7 @@ class Funciones
   }
 
   /**
-   * Configuracion para la paginacion por defecto, 
+   * Configuracion para la paginacion por defecto solo anterior y siguiente, 
    * hay que añadir:
    * $this->load->library('pagination');
    * $this->pagination->initialize($this->funciones->$cfgPaginacion);

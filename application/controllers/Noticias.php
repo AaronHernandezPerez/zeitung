@@ -94,6 +94,7 @@ class Noticias extends CI_Controller
   public function addComentario()
   {
     $this->load->model('comentarios_m');
+    $_POST['nombre'] = $this->funciones->trimPrimPalbMayus($_POST['nombre']);
     $this->comentarios_m->registrarComentario($_POST);
     echo ('Comentario añadido');
   }

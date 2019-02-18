@@ -7,7 +7,7 @@ class Noticias_m extends CI_Model
    * Registra la noticia y devuelve su id
    *
    * @param [type] $datos
-   * @return void
+   * @return object
    */
   public function registrarNoticia($datos)
   {
@@ -15,22 +15,42 @@ class Noticias_m extends CI_Model
     return $this->db->insert_id();
   }
 
-
+  /**
+   * Obtiene el listado de las noticias para editarlas
+   *
+   * @param string $idautor id del autor
+   * @param string $limite cuantas noticias debe obtener
+   * @param string $offset a partir de cual debe cogerlas
+   * @return object
+   */
   public function obtenerListaNoticiasEditor($idautor, $limite = '', $offset = '')
   {
-    $query = $this->db->select('id,titulo,fecha')
+    $subquery = ', (SELECT COUNT(*) FROM comentarios WHERE noticia = noticias.id) comentarios';
+    $query = $this->db->select('noticias.id,titulo,noticias.fecha, (SELECT COUNT(*) FROM comentarios WHERE noticia = noticias.id) comentarios')
       ->where('autor', $idautor)
       ->order_by('id', 'DESC')
       ->get('noticias', $limite, $offset);
     return $query->result();
   }
 
+  /**
+   * Devuelve cuantas noticias ha publicado un autor
+   *
+   * @param string $idautor
+   * @return int
+   */
   public function obtenerNumeroNoticiasEditor($idautor)
   {
     return $this->db->where('autor', $idautor)
       ->count_all_results('noticias');
   }
 
+  /**
+   * Devuelve cuantas noticias tiene el nombre de la categoria pasada por parametro
+   *
+   * @param string $nombreCategoria
+   * @return int
+   */
   public function obtenerNumeroNoticiasCategoria($nombreCategoria)
   {
     return $this->db->select('*')
@@ -44,7 +64,7 @@ class Noticias_m extends CI_Model
    * Obtiene el autor de una noticia
    *
    * @param int $idnoticia
-   * @return void
+   * @return object
    */
   public function getAutor($idnoticia)
   {
@@ -54,6 +74,12 @@ class Noticias_m extends CI_Model
     return $query->row()->autor;
   }
 
+  /**
+   * Obtiene una noticia a partir de su id
+   *
+   * @param string $idnoticia
+   * @return object
+   */
   public function obtenerNoticia($idnoticia)
   {
     $query = $this->db->select('id,categoria,titulo,cabecera,cuerpo')
@@ -66,7 +92,7 @@ class Noticias_m extends CI_Model
    * Devuelve todos los paratados de las noticias, y el nombre completo del autor
    *
    * @param [type] $idnoticia
-   * @return void
+   * @return object
    */
   public function obtenerNoticiaNombre($idnoticia)
   {
@@ -77,6 +103,12 @@ class Noticias_m extends CI_Model
     return $query->row();
   }
 
+  /**
+   * Obtiene el nombre del autor a partir de la id de la noticia
+   *
+   * @param string $idNoticia
+   * @return object
+   */
   public function obtenerNombreAutor($idNoticia)
   {
     $query = $this->db->select('username')
@@ -87,18 +119,34 @@ class Noticias_m extends CI_Model
     return $query->row()->username;
   }
 
+  /**
+   * Actualiza una noticia con los nuevos datos
+   *
+   * @param array $datos
+   * @return void
+   */
   public function actualizarNoticia($datos)
   {
     $this->db->where('id', $datos['id'])
       ->update('noticias', $datos);
   }
 
-
+  /**
+   * Elimina la noticia 
+   *
+   * @param string $idNoticia
+   * @return void
+   */
   public function eliminarNoticia($idNoticia)
   {
     $this->db->delete('noticias', ['id' => $idNoticia]);
   }
 
+  /**
+   * Obtiene los autores que tienen notiicas publicadas
+   *
+   * @return object
+   */
   public function obtenerIdAutores()
   {
     return $this->db->select('autor')
@@ -113,7 +161,7 @@ class Noticias_m extends CI_Model
    * @param string $categoria
    * @param string $limite
    * @param string $offset
-   * @return void
+   * @return object
    */
   public function obtenerNoticiasPorNombreCat($categoria = '', $limite = '', $offset = '')
   {

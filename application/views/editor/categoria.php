@@ -1,12 +1,12 @@
-<div class="card">
+<div class="card shadow">
   <div class="card-body">
     <h3 class="card-title text-center">Añade una categoría</h3>
     <form action="<?php echo base_url() ?>editor/addCategoria" method="post">
       <div class="form-group row">
         <label for="nombre" class="col-sm-3 col-form-label">Categoria</label>
         <div class="col-sm-9">
-          <input required maxlenght="100" type="text" class="form-control" id="nombre" name="nombre" placeholder="ej. Tecnología"
-            autofocus>
+          <input required maxlenght="100" type="text" class="form-control" id="nombre" name="nombre"
+            placeholder="ej. Tecnología" autofocus>
         </div>
       </div>
       <div class="d-flex justify-content-center">
@@ -28,8 +28,8 @@
 
         <div class="form-group col-md-6">
           <label for="nombre">Nuevo nombre</label>
-          <input required maxlength="100" type="text" class="form-control" id="nombre" name="nombre" placeholder="ej. Tecnología"
-            autofocus>
+          <input required maxlength="100" type="text" class="form-control" id="nombre" name="nombre"
+            placeholder="ej. Tecnología" autofocus>
         </div>
       </div>
 

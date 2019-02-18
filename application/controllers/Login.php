@@ -1,6 +1,9 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+/**
+ * Controlador encargado de autotenticar o registrar el editor
+ */
 class Login extends CI_Controller
 {
 
@@ -52,15 +55,14 @@ class Login extends CI_Controller
     $_POST['username'] = $this->funciones->trimMinus($_POST['username']);
     $_POST['email'] = $this->funciones->trimMinus($_POST['email']);
     // El nombre y los apellidos se capitalizará la primera letra de cada palabra
-    $_POST['nombre'] = $this->funciones->trimPrimLetrMayus($_POST['nombre']);
-    $_POST['apellidos'] = $this->funciones->trimPrimLetrMayus($_POST['apellidos']);
+    $_POST['nombre'] = $this->funciones->trimPrimPalbMayus($_POST['nombre']);
+    $_POST['apellidos'] = $this->funciones->trimPrimPalbMayus($_POST['apellidos']);
     // Por ultimo encriptamos la contraseña con Argon2
     $_POST['password'] = password_hash($_POST['password'], PASSWORD_ARGON2I);
 
     // Importamoos el modelo y lo llamamos con los datos guardados
     $this->load->model('editores_m');
-    // print_r($_POST);
-    // die;
+
     // Eliminamos el valor del captcha-response antes de registrarlo
     unset($_POST['g-recaptcha-response']);
     $this->editores_m->registrarEditor($_POST);

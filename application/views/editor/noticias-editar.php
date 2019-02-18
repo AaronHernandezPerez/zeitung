@@ -3,7 +3,7 @@
 <!-- Temas de quill -->
 <link href="<?php echo base_url() ?>assets/libraries/quill/quill.snow.css" rel="stylesheet">
 
-<div class="card">
+<div class="card shadow">
   <div class="card-body">
     <h3 class="card-title"><?php echo $cardTitle ?></h3>
     <form method="post" action="<?php echo base_url() ?>editor/actualizarNoticia">
@@ -50,8 +50,8 @@
       </div>
 
       <div class="d-flex justify-content-around">
-        <button class="btn btn-lg btn-dark">Editar noticia</button>
-        <a href="<?= base_url() . 'editor/' . $volver ?>" class="btn btn-lg btn-dark">Cancelar</a>
+        <button class="btn btn-lg btn-dark" type="submit">Guardar cambios</button>
+        <a href="<?= base_url() . 'editor/' . $volver ?>" class="btn btn-lg btn-secondary">Cancelar</a>
 
       </div>
     </form>

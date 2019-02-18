@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card shadow">
   <div class="card-body">
     <h2 class="card-title mb-3 text-center">Listado de noticias:</h2>
     <?php foreach ($noticias as $key => $value) : ?>

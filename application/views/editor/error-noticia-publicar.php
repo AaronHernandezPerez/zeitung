@@ -1,3 +1,7 @@
-<h3 class="text-danger text-center display-3">No se puede publicar una noticia </h3>
-<h3>Por que no hay ninguna categoría en la que
-  publicarla.</h3>
+<div class="card shadow">
+  <div class="card-body">
+    <h3 class="card-title">No se puede publicar una noticia </h3>
+    <p class="card-text">Por que no hay ninguna categoría en la que
+      publicarla.</p>
+  </div>
+</div>

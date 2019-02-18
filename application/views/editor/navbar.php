@@ -3,6 +3,7 @@
   display: flex;
   height: 100%;
   align-items: center;
+  text-align: center;
 }
 </style>
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
@@ -21,11 +22,8 @@
           <a class="nav-link" href="<?php echo base_url() ?>editor/publicarNoticia">Publicar noticia</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url() ?>editor/editarNoticias">Moderar noticias</a>
+          <a class="nav-link" href="<?php echo base_url() ?>editor/moderarNoticias">Moderar noticias</a>
         </li>
-        <!-- <li class="nav-item">
-  	      <a class="nav-link" href="<?php echo base_url() ?>editor/">Moderar comentarios</a>
-  	    </li> -->
         <?php if ($_SESSION['admin']) : ?>
         <!-- Menu solo para los administradores -->
         <li class="nav-item dropdown">

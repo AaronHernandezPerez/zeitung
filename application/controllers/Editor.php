@@ -1,6 +1,12 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+/**
+ * Controlador encargado del back-end del periodico, permitiendo
+ * a los periodistas añadir noticias, modificarlas, borrarlas o moderar sus comentarios,
+ * y a los administradores crear nuevas categorias, moderar las noticias de todos los editores
+ * así como eliminar editores
+ */
 class Editor extends CI_Controller
 {
 
@@ -100,27 +106,51 @@ class Editor extends CI_Controller
    * @param string $id
    * @return void
    */
-  public function editarNoticias()
+  public function moderarNoticias()
   {
     $datos['titulo'] = "Editor {$_SESSION['username']}";
     $datos['contenido'] = 'editor/noticias-seleccionar.php';
     $this->load->model('noticias_m');
     // Valores para la query 'obtenerListaNoticiasEditor'
     $limite = 5;
-    $offset = $this->uri->segment(3, 0);
+    $offset = abs($this->uri->segment(3, 0));
     $datos['noticias'] = $this->noticias_m->obtenerListaNoticiasEditor($_SESSION['id'], $limite, $offset);
-    // $datos['noticias'] = $this->noticias_m->obtenerListaNoticiasEditor($_SESSION['id']);
+
     $datos['miJS'] = ['js/noticias-seleccionar.js'];
     $datos['miCSS'] = 'noticias-seleccionar.css';
     
     // Cargamos la paginación
     $this->load->library('pagination');
     $totalNoticias = $this->noticias_m->obtenerNumeroNoticiasEditor($_SESSION['id']);
-    $cfgPaginacion = $this->funciones->cfgPaginacion('editor/editarNoticias/', $totalNoticias, $limite); // Cargamos la configuracion de la paginacion
+    // Comprobamos que no se haya introducido nn numero superior al total
+    if ($offset >= $totalNoticias) {
+      redirect('editor/moderarNoticias');
+      die;
+    }
+    $cfgPaginacion = $this->funciones->cfgPaginacion('editor/moderarNoticias/', $totalNoticias, $limite); // Cargamos la configuracion de la paginacion
     $this->pagination->initialize($cfgPaginacion);
 
     // Cargamos la vista
     $this->load->view('template_editor', $datos);
+  }
+
+  /**
+   * Eliminará los comentarios pasados por POST y redireccionara a $_session['vovler']
+   *
+   * @return void
+   */
+  public function eliminarComentarios()
+  {
+    $this->load->model('comentarios_m');
+    // Recorremos el array eliminando cada uno de los comentarios marcados
+    foreach ($_POST['id'] as $value) {
+      $this->comentarios_m->eliminarComentario(['id' => $value]);
+    }
+    
+    // Redireccionamos con un mensaje de información
+    $this->alertas->add("Los <b>comentarios</b> han sido eliminados con éxito", 'success');
+    redirect('editor/' . $_SESSION['volver']);
+    unset($_SESSION['volver']);
   }
 
   /**
@@ -132,18 +162,17 @@ class Editor extends CI_Controller
    */
   public function modificarNoticia($id)
   {
-    // Guardamos desde donde se ha entrado
-    $referer = explode('/', $_SERVER['HTTP_REFERER']);
-    $_SESSION['volver'] = array_pop($referer);
+    $_SESSION['volver'] = $this->anteriorPagina();
     $datos['volver'] = $_SESSION['volver'];
-
     // Si se ha introducido una id en la url
     $this->load->model('noticias_m');
     // Comprobamos que sea su noticia si no es admin
     $autorNoticia = $this->noticias_m->getAutor($id);
     if (!$_SESSION['admin'] && ($autorNoticia != $_SESSION['id'])) {
       $this->alertas->add("No tienes <b>acceso</b> a esta noticia");
-      redirect('editor/editarNoticias');
+      redirect('editor/' . $_SESSION['volver']);
+      unset($_SESSION['volver']);
+      die;
     }
 
     // Mensaje de la tarjeta para diferenciar tus noticias de las que editas siendo admin
@@ -172,8 +201,28 @@ class Editor extends CI_Controller
       $this->load->view('template_editor', $datos);
     } else {
       $this->alertas->add("La noticia <b>{$id}</b> no existe");
+      redirect('editor/' . $_SESSION['volver']);
       unset($_SESSION['volver']);
-      redirect('editor/editarNoticias');
+    }
+  }
+
+  /**
+   * Obtiene en enlace anterior si existe
+   *
+   * @return string
+   */
+  private function anteriorPagina()
+  {
+    if (isset($_SERVER['HTTP_REFERER'])) {
+      $referer = explode('/', $_SERVER['HTTP_REFERER']);
+      $ultimoEnlace = array_pop($referer);
+      if ((string)(int)$ultimoEnlace) {
+        return array_pop($referer) . '/' . $ultimoEnlace;
+      } else {
+        return $ultimoEnlace;
+      }
+    } else {
+      return '';
     }
   }
 
@@ -232,6 +281,49 @@ class Editor extends CI_Controller
   }
 
   /**
+   * Página para poder borrar los comentarios de una noticia
+   *
+   * @param  $idNoticia
+   * @return html
+   */
+  public function moderarComentarios($idNoticia)
+  {
+    // Guardamos desde donde se ha entrado
+    $_SESSION['volver'] = $this->anteriorPagina();
+    $datos['volver'] = $_SESSION['volver'];
+
+    // Comprobamos que sea su noticia si no es admin
+    $this->load->model('noticias_m');
+    $autorNoticia = $this->noticias_m->getAutor($idNoticia);
+    if (!$_SESSION['admin'] && ($autorNoticia != $_SESSION['id'])) {
+      $this->alertas->add("No tienes <b>acceso</b> los comentarios de esta noticia");
+      redirect('editor/' . $_SESSION['volver']);
+      unset($_SESSION['volver']);
+      die;
+    }
+
+    // Obtenemos el titulo de la noticia
+    $datos['noticia'] = $this->noticias_m->obtenerNoticia($idNoticia)->titulo;
+    if (!$datos['noticia']) {
+      // Si no existe redireccionamos con un mensaje de error
+      $this->alertas->add("La <b>noticia</b> seleccionada no existe");
+      redirect('editor/' . $_SESSION['volver']);
+      unset($_SESSION['volver']);
+      die;
+    }
+
+
+    // Comentarios
+    $this->load->model('comentarios_m');
+    $datos['comentarios'] = $this->comentarios_m->obtenerComentariosNoticia($idNoticia);
+    $datos['miJS'] = ['js/comentarios-filtrar.js'];
+
+    $datos['titulo'] = "Editor {$_SESSION['username']}";
+    $datos['contenido'] = 'editor/comentarios-moderar.php';
+    $this->load->view('template_editor', $datos);
+  }
+
+  /**
    * Devolverá el html de un modal con un mensaje de confirmación para borrar la noticia
    * recibe por post el id y el titulo de la noticia
    *
@@ -267,6 +359,11 @@ class Editor extends CI_Controller
 
   ### Metodos solo para el admin
 
+  /**
+   * Comprueba si eres un administrador, si no redirecciona con un mensaje de error
+   *
+   * @return void
+   */
   private function comprobarAdmin()
   {
     if (!$_SESSION['admin']) {

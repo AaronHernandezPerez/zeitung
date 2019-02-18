@@ -1,36 +1,52 @@
-<div class="card">
+<div class="card shadow">
   <div class="card-body">
     <h3 class="card-title">Tus noticias</h3>
-    <!-- Header de la 'tabla' -->
-    <div class="row filaNoticias thead">
-      <div class="col-sm px-2">Titulo</div>
-      <div class="col-6 col-sm-3 col-lg-2">Fecha</div>
-      <div class="col-6 col-sm-2 col-md-1 d-flex justify-content-end">Eliminar</div>
-    </div> <!-- Fin row -->
 
-    <div class="filaNoticias thead d-flex justify-content-around">
-      <div class="flex-grow-1">Titulo</div>
-      <div class="px-1 fecha">Fecha</div>
-      <div class="px-1">Eliminar</div>
-    </div> <!-- Fin row -->
-    <!-- Tabla con divs -->
-    <?php foreach ($noticias as $value) : ?>
-    <div class="filaNoticias row bt">
-      <div class="col-sm px-0">
-        <a class="enlaceTitulo px-2"
-          href="<?php echo base_url() . "editor/modificarNoticia/{$value->id}" ?>"><?php echo $value->titulo ?></a>
-      </div>
-
-      <div class="col-6 col-sm-3 col-lg-2 d-flex align-items-center">
-        <?= date('d-m-Y', strtotime($value->fecha)) ?>
-      </div>
-
-      <div class="col-6 col-sm-2 col-md-1 d-flex justify-content-end">
-        <button data-id="<?php echo $value->id ?>" data-titulo="<?php echo $value->titulo ?>"
-          class="btn btn-outline-danger my-2 btnBorrar" type="button"><i class="fas fa-trash-alt"></i></button>
-      </div>
-    </div> <!-- Fin row -->
-    <?php endforeach ?>
+    <table class="table table-sm  table-hover table-dark">
+      <thead class="">
+        <tr>
+          <th>Editar noticia</th>
+          <th style="width:8em;">Fecha</th>
+          <th>Comentarios</th>
+          <th>Eliminar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach ($noticias as $value) : ?>
+        <tr>
+          <td>
+            <a class="enlaceTitulo px-2"
+              href="<?php echo base_url() . "editor/modificarNoticia/{$value->id}" ?>"><?php echo $value->titulo ?></a>
+          </td>
+          <td>
+            <p class="my-2">
+              <?= date('d-m-Y', strtotime($value->fecha)) ?>
+            </p>
+          </td>
+          <td>
+            <div class="d-flex justify-content-center my-2">
+              <?php if ($value->comentarios == 0) : ?>
+              <button class="btn btn-outline-primary btn-coment" type="button">
+                <i class="far fa-comments"></i> <span class="badge badge-dark"><?= $value->comentarios ?></span>
+              </button>
+              <?php else : ?>
+              <a href="<?php echo base_url() . "editor/moderarComentarios/{$value->id}" ?>"
+                class="btn btn-outline-primary" role="button">
+                <i class="far fa-comments"></i> <span class="badge badge-dark"><?= $value->comentarios ?></span>
+              </a>
+              <?php endif; ?>
+            </div>
+          </td>
+          <td>
+            <div class="d-flex justify-content-center my-2">
+              <button data-id="<?php echo $value->id ?>" data-titulo="<?php echo $value->titulo ?>"
+                class="btn btn-outline-danger btnBorrar" type="button"><i class="fas fa-trash-alt"></i></button>
+            </div>
+          </td>
+        </tr>
+        <?php endforeach ?>
+      </tbody>
+    </table>
 
     <!-- Paginacion de las noticias -->
     <div class="d-flex justify-content-center mt-3">
