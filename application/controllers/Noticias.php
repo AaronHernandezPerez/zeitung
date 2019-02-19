@@ -60,8 +60,8 @@ class Noticias extends CI_Controller
   /**
    * Muestra la noticia pasada por post con sus comentarios
    *
-   * @param [type] $idNoticia
-   * @return void
+   * @param string $idNoticia
+   * @return html
    */
   public function leer($idNoticia)
   {
@@ -97,5 +97,39 @@ class Noticias extends CI_Controller
     $_POST['nombre'] = $this->funciones->trimPrimPalbMayus($_POST['nombre']);
     $this->comentarios_m->registrarComentario($_POST);
     echo ('Comentario añadido');
+  }
+
+  /**
+   * Muestra un resumen del editor con sus datos y las noticias publicadas por él,
+   *
+   * @param string $idEditor
+   * @return html
+   */
+  public function perfil($idEditor)
+  {
+    setlocale(LC_ALL, 'es_ES');
+    // Cargamos los datos del editor
+    $this->load->model('editores_m');
+    $datos['editor'] = $this->editores_m->obtenerTodoEditor($idEditor);
+
+    // Comprobamos que exista, sino redireccionamos
+    if (!$datos['editor']) {
+      redirect();
+      die;
+    }
+
+    $datos['titulo'] = 'Perfil de ' . $datos['editor']->nombre . '.';
+    $datos['contenido'] = 'noticias/perfil.php';
+    
+    // Cargamos las categorias
+    $this->load->model('categorias_m');
+    $categorias = $this->funciones->soloValores($this->categorias_m->obtenerNombreCategoriasArr());
+    $datos['categorias'] = $categorias;
+
+    // Cargamos los datos de sus noticias
+    $this->load->model('noticias_m');
+    $datos['noticias'] = $this->noticias_m->obtenerListaNoticiasEditor($idEditor);
+
+    $this->load->view('template_noticias', $datos);
   }
 }

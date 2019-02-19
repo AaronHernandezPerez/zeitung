@@ -1,0 +1,6 @@
+drop table comentarios;
+drop table tags_noticias;
+drop table tags;
+drop table noticias;
+drop table categorias;
+drop table editores;

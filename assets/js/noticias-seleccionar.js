@@ -6,8 +6,12 @@ let contAlertas = 0; // Para poner una id a las alertas
 // spaghetti a la boloñesa para manejar la creación del modal y la creación de la alerta al hacer click en borrar una noticia
 // Y borrar la tabla al recibir la respuesta
 $('.btnBorrar').on('click', function () {
+  borrarModal(this);
+});
+
+function borrarModal(elemento) {
   $.post(`${BASE_URL}editor/modalBorrar`,
-    { id: this.dataset.id, titulo: this.dataset.titulo },
+    { id: elemento.dataset.id, titulo: elemento.dataset.titulo },
     (data) => {
       // Se añade al container
       $contenedor.append(data);
@@ -41,15 +45,13 @@ $('.btnBorrar').on('click', function () {
             }, 2500);
 
             // Eliminamos la fila de la noticia
-            $(this).parents('tr').remove();
+            $(elemento).parents('tr').remove();
           });
       });
     });
-});
-
-
+}
 // Manejador de eventos para las noticias sin comentarios
-const $btnComentarios = $('.btn-coment')
+let $btnComentarios = $('.btn-coment')
 
 $btnComentarios.on('click', function () {
   const id = `alertaBorrar${contAlertas++}`

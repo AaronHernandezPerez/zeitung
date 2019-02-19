@@ -42,6 +42,14 @@
         <?php endif; ?>
       </ul>
       <ul class="navbar-nav ">
+
+        <li class="nav-item">
+          <a class="nav-link active" href="#">Item 1</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Item 2</a>
+        </li>
+
         <li class="nav-item">
           <a class="nav-link" href="<?php echo base_url() ?>editor/cerrarSesion">Cerrar Sesión</a>
         </li>

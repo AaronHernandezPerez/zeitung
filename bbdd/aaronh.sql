@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-02-2019 a las 18:26:46
--- Versión del servidor: 10.1.35-MariaDB
--- Versión de PHP: 7.2.9
+-- Tiempo de generación: 19-02-2019 a las 09:29:26
+-- Versión del servidor: 10.1.37-MariaDB
+-- Versión de PHP: 7.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,10 +19,8 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `zeitung`
+-- Base de datos: `aaronh`
 --
-CREATE DATABASE IF NOT EXISTS `zeitung` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci;
-USE `zeitung`;
 
 -- --------------------------------------------------------
 
@@ -30,7 +28,6 @@ USE `zeitung`;
 -- Estructura de tabla para la tabla `categorias`
 --
 
-DROP TABLE IF EXISTS `categorias`;
 CREATE TABLE `categorias` (
   `id` int(11) NOT NULL,
   `nombre` varchar(100) COLLATE utf8mb4_spanish_ci NOT NULL
@@ -51,7 +48,6 @@ INSERT INTO `categorias` (`id`, `nombre`) VALUES
 -- Estructura de tabla para la tabla `comentarios`
 --
 
-DROP TABLE IF EXISTS `comentarios`;
 CREATE TABLE `comentarios` (
   `id` int(11) NOT NULL,
   `noticia` int(11) NOT NULL,
@@ -73,7 +69,6 @@ INSERT INTO `comentarios` (`id`, `noticia`, `nombre`, `comentario`, `fecha`) VAL
 -- Estructura de tabla para la tabla `editores`
 --
 
-DROP TABLE IF EXISTS `editores`;
 CREATE TABLE `editores` (
   `id` int(11) NOT NULL,
   `username` varchar(50) COLLATE utf8mb4_spanish_ci NOT NULL,
@@ -81,6 +76,7 @@ CREATE TABLE `editores` (
   `email` varchar(80) COLLATE utf8mb4_spanish_ci NOT NULL,
   `nombre` varchar(30) COLLATE utf8mb4_spanish_ci NOT NULL,
   `apellidos` varchar(50) COLLATE utf8mb4_spanish_ci NOT NULL,
+  `imagen_p` varchar(255) COLLATE utf8mb4_spanish_ci NOT NULL DEFAULT 'editores\\m-icon.png',
   `administrador` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
@@ -88,11 +84,11 @@ CREATE TABLE `editores` (
 -- Volcado de datos para la tabla `editores`
 --
 
-INSERT INTO `editores` (`id`, `username`, `password`, `email`, `nombre`, `apellidos`, `administrador`) VALUES
-(1, 'test', '$argon2i$v=19$m=1024,t=2,p=2$TFlZbnMzc2VyUnVVcDFvVQ$F/XUnvveNILmr3Vo55syuNhpu0lc2jfPXD7YbGhrd3U', '12345@test', 'Test', 'Rodolfo Castaño', 1),
-(2, 'dani', '$argon2i$v=19$m=1024,t=2,p=2$S0ZTWC5WeUxPUDdwS0VvOA$t+LAyQYs1HLSpGWo7DjPYmhbhI++9BAw8ak3PNh1rgc', '12345@dsad', 'Dani', 'Barriguita', 0),
-(3, 'admin', '$argon2i$v=19$m=1024,t=2,p=2$RUw5U1pObXJSUDdVamliRw$a56Gnhn6x3JO3SQ4mGG1kZZB7KWSZJ7e8EJdk1UIuJQ', '1234@email', '1234', '1234 Dasd Asd As Das', 1),
-(4, 'aaron', '$argon2i$v=19$m=1024,t=2,p=2$aUlzUDNCRWthRnZKZmhmZw$1bentJD3I1MVrlE362eCbBJLw6qa2y34znPgOO3Tpes', 'aaron@email.com', 'Aarón', 'Hernández Pérez', 1);
+INSERT INTO `editores` (`id`, `username`, `password`, `email`, `nombre`, `apellidos`, `imagen_p`, `administrador`) VALUES
+(1, 'test', '$argon2i$v=19$m=1024,t=2,p=2$TFlZbnMzc2VyUnVVcDFvVQ$F/XUnvveNILmr3Vo55syuNhpu0lc2jfPXD7YbGhrd3U', '12345@test', 'Test', 'Rodolfo Castaño', 'editores\\m-icon.png', 1),
+(2, 'dani', '$argon2i$v=19$m=1024,t=2,p=2$S0ZTWC5WeUxPUDdwS0VvOA$t+LAyQYs1HLSpGWo7DjPYmhbhI++9BAw8ak3PNh1rgc', '12345@dsad', 'Dani', 'Barriguita', 'editores\\m-icon.png', 0),
+(3, 'admin', '$argon2i$v=19$m=1024,t=2,p=2$RUw5U1pObXJSUDdVamliRw$a56Gnhn6x3JO3SQ4mGG1kZZB7KWSZJ7e8EJdk1UIuJQ', '1234@email', '1234', '1234 Dasd Asd As Das', 'editores\\m-icon.png', 1),
+(4, 'aaron', '$argon2i$v=19$m=1024,t=2,p=2$aUlzUDNCRWthRnZKZmhmZw$1bentJD3I1MVrlE362eCbBJLw6qa2y34znPgOO3Tpes', 'aaron@email.com', 'Aarón', 'Hernández Pérez', 'editores\\m-icon.png', 1);
 
 -- --------------------------------------------------------
 
@@ -100,7 +96,6 @@ INSERT INTO `editores` (`id`, `username`, `password`, `email`, `nombre`, `apelli
 -- Estructura de tabla para la tabla `noticias`
 --
 
-DROP TABLE IF EXISTS `noticias`;
 CREATE TABLE `noticias` (
   `id` int(11) NOT NULL,
   `autor` int(11) NOT NULL,
@@ -134,7 +129,6 @@ INSERT INTO `noticias` (`id`, `autor`, `categoria`, `titulo`, `cabecera`, `cuerp
 -- Estructura de tabla para la tabla `tags`
 --
 
-DROP TABLE IF EXISTS `tags`;
 CREATE TABLE `tags` (
   `nombre` varchar(50) COLLATE utf8mb4_spanish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
@@ -165,7 +159,6 @@ INSERT INTO `tags` (`nombre`) VALUES
 -- Estructura de tabla para la tabla `tags_noticias`
 --
 
-DROP TABLE IF EXISTS `tags_noticias`;
 CREATE TABLE `tags_noticias` (
   `noticia` int(11) NOT NULL,
   `tag` varchar(50) COLLATE utf8mb4_spanish_ci NOT NULL

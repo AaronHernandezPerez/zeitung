@@ -155,6 +155,18 @@ class Noticias_m extends CI_Model
   }
 
   /**
+   * Obtiene la id y el nombre de los autores que tienen notiicas publicadas
+   *
+   * @return object
+   */
+  public function obtenerIdNombreAutores()
+  {
+    return $this->db->select('autor id, (SELECT nombre FROM editores WHERE id=autor) nombre')
+      ->group_by('autor')
+      ->get('noticias')->result();
+  }
+
+  /**
    * Obtiene las noticias de la categoria, siendo la categoria su nombre, ordenada de forma descendente
    * Este metodo es le que se llama para ver el listado de las noticias en el controlado noticias
    *

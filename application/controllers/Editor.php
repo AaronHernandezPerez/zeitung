@@ -154,6 +154,22 @@ class Editor extends CI_Controller
   }
 
   /**
+   * Devuelve html con la lista de las noticias para el autor
+   *
+   * @param string $id id del autor
+   * @param string $titulo titulo de la tabla
+   * @return html 
+   */
+  public function obtenerListaNoticias()
+  {
+    $datos['titulo'] = $_POST['titulo'];
+    $this->load->model('noticias_m');
+    $datos['noticias'] = $this->noticias_m->obtenerListaNoticiasEditor($_POST['id']);
+    $this->load->view('editor/complementos/tablas-seleccionar.php', $datos);
+  }
+
+
+  /**
    * Vista para modificar los datos, los cuales se rellenarán los campos y tendrá la opción de guardar o cancelar los cambios
    * se comprobará que esa noticia pertenece a ese editor antes de dejarle editarla
    *
@@ -203,26 +219,6 @@ class Editor extends CI_Controller
       $this->alertas->add("La noticia <b>{$id}</b> no existe");
       redirect('editor/' . $_SESSION['volver']);
       unset($_SESSION['volver']);
-    }
-  }
-
-  /**
-   * Obtiene en enlace anterior si existe
-   *
-   * @return string
-   */
-  private function anteriorPagina()
-  {
-    if (isset($_SERVER['HTTP_REFERER'])) {
-      $referer = explode('/', $_SERVER['HTTP_REFERER']);
-      $ultimoEnlace = array_pop($referer);
-      if ((string)(int)$ultimoEnlace) {
-        return array_pop($referer) . '/' . $ultimoEnlace;
-      } else {
-        return $ultimoEnlace;
-      }
-    } else {
-      return '';
     }
   }
 
@@ -360,20 +356,6 @@ class Editor extends CI_Controller
   ### Metodos solo para el admin
 
   /**
-   * Comprueba si eres un administrador, si no redirecciona con un mensaje de error
-   *
-   * @return void
-   */
-  private function comprobarAdmin()
-  {
-    if (!$_SESSION['admin']) {
-      $this->alertas->add("No tienes <b>acceso</b> a estas opciones");
-      redirect('editor');
-      die;
-    }
-  }
-
-  /**
    * Carga la vista categoria
    *
    * @return void
@@ -397,7 +379,9 @@ class Editor extends CI_Controller
    */
   public function addCategoria()
   {
-    $_POST['nombre'];
+    $this->comprobarAdmin();
+    // Formateamos el nombre
+    $_POST['nombre'] = $this->funciones->trimPrimLetrMayus($_POST['nombre']);
     $this->load->model('categorias_m');
     // Comprobamos que la categoria existe
     if ($this->categorias_m->existeCategoria($_POST['nombre'])) {
@@ -422,6 +406,7 @@ class Editor extends CI_Controller
    */
   public function actualizarCategoria()
   {
+    $this->comprobarAdmin();
     // Realizamos un update de categorias
     $this->load->model('categorias_m');
     // Formateamos el nuevo nombre de la categoria y lo actualizamos
@@ -440,27 +425,59 @@ class Editor extends CI_Controller
    */
   public function adminNoticias()
   {
+    $this->comprobarAdmin();
     $datos['titulo'] = "Editor {$_SESSION['username']}";
     $datos['contenido'] = 'editor/admin-noticias-seleccionar.php';
 
+    // Cargaremos los autores con noticias escritas
     $this->load->model('noticias_m');
-    // Introduciremos en un array asociativo las noticias de cada editor
-    // De la forma 'usernameEditor'=> array(ObjetoNoticia);
-    $autores = $this->noticias_m->obtenerIdAutores();
-    $datos['noticias'] = array(); // Preparamos el array de noticias
-    $this->load->model('editores_m');
-    foreach ($autores as $value) {
-      // Por cada autor obtenemos su nombre y lo asociamos en un array con sus noticias
-      $nombre = $this->editores_m->obtenerUsername($value->autor);
-      $datos['noticias'][$nombre] = $this->noticias_m->obtenerListaNoticiasEditor($value->autor);
-    }
-    $datos['miJS'] = ['js/noticias-seleccionar.js'];
+    $datos['autores'] = $this->noticias_m->obtenerIdNombreAutores();
+
     $datos['miCSS'] = 'noticias-seleccionar.css';
+    $datos['miJS'] = ['js/noticias-seleccionar.js', 'js/admin-noticias-seleccionar.js'];
+
+
     $this->load->view('template_editor', $datos);
   }
 
   public function adminEditores()
   {
+    $this->comprobarAdmin();
   # code...
+  }
+
+  /**
+   * Comprueba si eres un administrador, si no redirecciona con un mensaje de error
+   *
+   * @return void
+   */
+  private function comprobarAdmin()
+  {
+    if (!$_SESSION['admin']) {
+      $this->alertas->add("No tienes <b>acceso</b> a estas opciones");
+      redirect('editor');
+      die;
+    }
+  }
+
+
+  /**
+   * Obtiene en enlace anterior si existe
+   *
+   * @return string
+   */
+  private function anteriorPagina()
+  {
+    if (isset($_SERVER['HTTP_REFERER'])) {
+      $referer = explode('/', $_SERVER['HTTP_REFERER']);
+      $ultimoEnlace = array_pop($referer);
+      if ((string)(int)$ultimoEnlace) {
+        return array_pop($referer) . '/' . $ultimoEnlace;
+      } else {
+        return $ultimoEnlace;
+      }
+    } else {
+      return '';
+    }
   }
 }

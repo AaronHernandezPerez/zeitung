@@ -16,11 +16,16 @@ class Editores_m extends CI_Model
     return $query->row();
   }
 
-  public function obtenerUsername($idAutor)
+  public function obtenerUsername($idEditor)
   {
     return $this->db->select('username')
-      ->where('id', $idAutor)
+      ->where('id', $idEditor)
       ->get('editores')->row()->username;
+  }
+
+  public function obtenerTodoEditor($idEditor)
+  {
+    return $this->db->get('editores')->row();
   }
 
   /**
