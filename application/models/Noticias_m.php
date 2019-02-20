@@ -7,7 +7,7 @@ class Noticias_m extends CI_Model
    * Registra la noticia y devuelve su id
    *
    * @param [type] $datos
-   * @return object
+   * @return array de objetos
    */
   public function registrarNoticia($datos)
   {
@@ -21,7 +21,7 @@ class Noticias_m extends CI_Model
    * @param string $idautor id del autor
    * @param string $limite cuantas noticias debe obtener
    * @param string $offset a partir de cual debe cogerlas
-   * @return object
+   * @return array de objetos
    */
   public function obtenerListaNoticiasEditor($idautor, $limite = '', $offset = '')
   {
@@ -64,7 +64,7 @@ class Noticias_m extends CI_Model
    * Obtiene el autor de una noticia
    *
    * @param int $idnoticia
-   * @return object
+   * @return array de objetos
    */
   public function getAutor($idnoticia)
   {
@@ -78,7 +78,7 @@ class Noticias_m extends CI_Model
    * Obtiene una noticia a partir de su id
    *
    * @param string $idnoticia
-   * @return object
+   * @return array de objetos
    */
   public function obtenerNoticia($idnoticia)
   {
@@ -92,7 +92,7 @@ class Noticias_m extends CI_Model
    * Devuelve todos los paratados de las noticias, y el nombre completo del autor
    *
    * @param [type] $idnoticia
-   * @return object
+   * @return array de objetos
    */
   public function obtenerNoticiaNombre($idnoticia)
   {
@@ -107,7 +107,7 @@ class Noticias_m extends CI_Model
    * Obtiene el nombre del autor a partir de la id de la noticia
    *
    * @param string $idNoticia
-   * @return object
+   * @return array de objetos
    */
   public function obtenerNombreAutor($idNoticia)
   {
@@ -145,7 +145,7 @@ class Noticias_m extends CI_Model
   /**
    * Obtiene los autores que tienen notiicas publicadas
    *
-   * @return object
+   * @return array de objetos
    */
   public function obtenerIdAutores()
   {
@@ -157,7 +157,7 @@ class Noticias_m extends CI_Model
   /**
    * Obtiene la id y el nombre de los autores que tienen notiicas publicadas
    *
-   * @return object
+   * @return array de objetos
    */
   public function obtenerIdNombreAutores()
   {
@@ -173,17 +173,35 @@ class Noticias_m extends CI_Model
    * @param string $categoria
    * @param string $limite
    * @param string $offset
-   * @return object
+   * @return array de objetos
    */
   public function obtenerNoticiasPorNombreCat($categoria = '', $limite = '', $offset = '')
   {
-    return $this->db->select('noticias.id,noticias.autor,noticias.titulo,noticias.cabecera,noticias.fecha,editores.username nombre')
+    return $this->db->select('noticias.id,noticias.autor,noticias.titulo,noticias.cabecera,noticias.fecha,CONCAT(editores.nombre," ",editores.apellidos) nombre,(SELECT COUNT(*) FROM comentarios WHERE comentarios.noticia=noticias.id) comentarios')
       ->from('noticias')
       ->join('categorias', 'noticias.categoria = categorias.id')
       ->join('editores', 'noticias.autor = editores.id')
       ->like('categorias.nombre', $categoria)
       ->order_by('fecha', 'DESC')
       ->limit($limite, $offset)
+      ->get()->result();
+  }
+
+
+  /**
+   * Busca un texto en las noticias utilizando busquedas a texto completo
+   * 
+   *
+   * @param string $busqueda
+   * @return array de objetos
+   */
+  public function busquedaFullText($busqueda)
+  {
+    return $this->db->select('noticias.id,noticias.autor,noticias.titulo,noticias.cabecera,noticias.fecha,CONCAT(editores.nombre," ",editores.apellidos) nombre,(SELECT COUNT(*) FROM comentarios WHERE comentarios.noticia=noticias.id) comentarios')
+      ->from('noticias')
+      ->join('editores', 'noticias.autor = editores.id')
+      ->where("MATCH (titulo,cabecera,cuerpo) AGAINST ('$busqueda')", null)
+      ->order_by('fecha', 'DESC')
       ->get()->result();
   }
 }

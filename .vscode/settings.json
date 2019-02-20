@@ -3,6 +3,7 @@
     "ignore": [
       "/.vscode/*",
       "/.git/*",
+      "/.git*",
       "/.htaccess",
       "/application/config/*"
     ],

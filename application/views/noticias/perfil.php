@@ -28,30 +28,27 @@ th {
                 <input type="text" readonly class="form-control-plaintext" value="<?= $editor->email ?> ">
               </div>
             </div>
-
-            <hr>
-
-            <h4>Noticias publicadas</h4>
-            <table class="table table-sm table-striped">
-              <thead>
-                <tr>
-                  <th scope="col">Titulo</th>
-                  <th scope="col">Fecha</th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php foreach ($noticias as $value) : ?>
-                <tr>
-                  <td><a href="<?= base_url() ?>noticias/leer/<?= $value->id ?>"><?= $value->titulo ?></a></td>
-                  <td><?= date('d-m-Y', strtotime($value->fecha)) ?></td>
-                </tr>
-                <?php endforeach; ?>
-
-              </tbody>
-            </table>
-
           </div>
-        </div>
+        </div> <!-- Fin media -->
+
+        <h4 class="my-3">Noticias publicadas</h4>
+        <table class="table table-sm table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Titulo</th>
+              <th scope="col">Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($noticias as $value) : ?>
+            <tr>
+              <td><a href="<?= base_url() ?>noticias/leer/<?= $value->id ?>"><?= $value->titulo ?></a></td>
+              <td><?= date('d-m-Y', strtotime($value->fecha)) ?></td>
+            </tr>
+            <?php endforeach; ?>
+
+          </tbody>
+        </table>
       </div>
     </div>
 

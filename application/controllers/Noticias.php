@@ -132,4 +132,29 @@ class Noticias extends CI_Controller
 
     $this->load->view('template_noticias', $datos);
   }
+
+  /**
+   * Busca el término introducido en el formulario aside,
+   *
+   * @return void
+   */
+  public function buscar()
+  {
+    $datos['titulo'] = "Zeitung, el peridico de cada dia.";
+    $datos['contenido'] = 'noticias/index.php';
+
+    // Cargamos las categorias
+    $this->load->model('categorias_m');
+    $categorias = $this->funciones->soloValores($this->categorias_m->obtenerNombreCategoriasArr());
+    $datos['categorias'] = $categorias;
+
+    $datos['contenido'] = 'noticias/buscar.php';
+
+    // Cargamos las noticias haciendo una búsqueda full text
+    $this->load->model('noticias_m');
+    $datos['noticias'] = $this->noticias_m->busquedaFullText($_POST['busqueda']);
+    $datos['busqueda'] = $_POST['busqueda'];
+
+    $this->load->view('template_noticias', $datos);
+  }
 }

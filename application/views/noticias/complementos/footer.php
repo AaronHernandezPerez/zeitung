@@ -132,7 +132,7 @@
   </div>
 </div>
 
-<div class="d-flex justify-content-around mt-4 bg-white p-1">
+<div class="d-flex justify-content-around mt-4 text-light bg-dark" p-1">
   <div>
     <a href="" class="enlacesF" data-toggle="modal" data-target="#modalContacto">Contactar</a>
   </div>

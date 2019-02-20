@@ -3,16 +3,13 @@
 
   <!-- Blog Entries Column -->
   <div class="col-md-8">
+    <h1 class="mb-4">Mostrando resultados de "<?= $busqueda ?>"</h1>
+
+    <?php if (count($noticias) == 0) : ?>
+    <h4 class="text-danger">No hay resultados que coincidan con la búsqueda</h4>
+    <?php else : ?>
 
     <?php foreach ($noticias as $value) : ?>
-    <!-- Blog Post -->
-    <!-- <div class="mb-3 rounded-0 shadow-sm bg-white p-2">
-      <h2>
-        <a href="<?= base_url() ?>noticias/leer/<?= $value->id ?>" class="text-dark"><?= $value->titulo ?></a>
-      </h2>
-      <p class="card-text"><?= $value->cabecera ?> </p>
-    </div> -->
-
     <div class="card mb-4">
       <div class="card-body">
         <h2 class="card-title"><a href="<?= base_url() ?>noticias/leer/<?= $value->id ?>"
@@ -31,10 +28,7 @@
     </div>
     <?php endforeach; ?>
 
-    <!-- Paginacion de las noticias -->
-    <div class="d-flex justify-content-center mt-3">
-      <?php echo $this->pagination->create_links(); ?>
-    </div>
+    <?php endif; ?>
 
   </div>
   <?php 

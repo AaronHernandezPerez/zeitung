@@ -19,6 +19,8 @@ class Editor extends CI_Controller
       redirect('login');
       die;
     }
+    // Cargamos el modelo por defecto para cargar la página
+    $this->load->model('editores_m');
   }
 
   /**
@@ -30,6 +32,7 @@ class Editor extends CI_Controller
   {
     $datos['titulo'] = "Editor {$_SESSION['username']}";
     $datos['contenido'] = 'editor/resumen.php';
+    $datos['miJS'] = ['js/estadisticas.js'];
     $this->load->view('template_editor', $datos);
   }
 
@@ -108,13 +111,17 @@ class Editor extends CI_Controller
    */
   public function moderarNoticias()
   {
-    $datos['titulo'] = "Editor {$_SESSION['username']}";
-    $datos['contenido'] = 'editor/noticias-seleccionar.php';
-    $this->load->model('noticias_m');
     // Valores para la query 'obtenerListaNoticiasEditor'
     $limite = 5;
     $offset = abs($this->uri->segment(3, 0));
+    $this->load->model('noticias_m');
     $datos['noticias'] = $this->noticias_m->obtenerListaNoticiasEditor($_SESSION['id'], $limite, $offset);
+
+    // Comprobamos que haya escrito alguna noticia, sino redireccionamos a 'editor'
+    if (count($datos['noticias']) == 0) {
+      $this->alertas->add("No tienes ninguna <b>noticia</b> que moderar");
+      redirect('editor');
+    }
 
     $datos['miJS'] = ['js/noticias-seleccionar.js'];
     $datos['miCSS'] = 'noticias-seleccionar.css';
@@ -131,6 +138,8 @@ class Editor extends CI_Controller
     $this->pagination->initialize($cfgPaginacion);
 
     // Cargamos la vista
+    $datos['titulo'] = "Editor {$_SESSION['username']}";
+    $datos['contenido'] = 'editor/noticias-seleccionar.php';
     $this->load->view('template_editor', $datos);
   }
 
@@ -352,8 +361,111 @@ class Editor extends CI_Controller
     redirect('login');
   }
 
+  /**
+   * Página para modificar la contraseña, email, nombres y imagen de perfil
+   *
+   * @return html
+   */
+  public function modificarPerfil()
+  {
+    $datos['titulo'] = "Editor {$_SESSION['username']}";
+    $datos['contenido'] = 'editor/modificar-perfil.php';
+    $datos['miJS'] = ['js/modificar-perfil.js'];
+    $this->load->helper('form');
 
-  ### Metodos solo para el admin
+
+    // Categorias
+    $this->load->model('categorias_m');
+    $datos['categorias'] = $this->categorias_m->obtenerCategorias();
+
+    // Datos del editor
+    $datos['editor'] = $this->editores_m->obtenerTodoEditor($_SESSION['id']);
+    $this->load->view('template_editor', $datos);
+  }
+
+  # Metodos del perfil
+  /**
+   * Método para cambiar la imagen por una pasada en POST
+   *
+   * @return void
+   */
+  public function cambiarimagen()
+  {
+    $config['upload_path'] = './assets/img/editores/temporal/';
+    $config['allowed_types'] = 'gif|jpg|png';
+    // $config['max_size'] = 100;
+    // $config['max_width'] = 1024;
+    // $config['max_height'] = 768;
+    $config['file_name'] = $_SESSION['username'];
+
+    $this->load->library('upload', $config);
+
+    if ($this->upload->do_upload('imagen_p')) {
+      $datosFichero = $this->upload->data();
+      // Borramos la anterior imagen si no es la por defecto
+      $anteriorImg = $this->editores_m->obtenerImagen($_SESSION['id']);
+      if ($anteriorImg != 'editores\m-icon.png') {
+        unlink('./assets/img/' . $anteriorImg);
+      }
+      
+      // Movemos la imagen guardada fuera de temporal
+      rename($config['upload_path'] . $datosFichero['file_name'], './assets/img/editores/' . $datosFichero['file_name']);
+
+      // Actualizamos su valor en la BBDD
+      $this->editores_m->cambiarImagen($datosFichero['file_name'], $_SESSION['id']);
+
+      // Mensaje de información y redireccionamos
+      $this->alertas->add('<b>Imagen</b> de perfil actualizada con éxito.', 'success');
+    } else {
+      // Si no se puede subir, mensaje de error y redireción
+      $this->alertas->add('No se ha podido cambiar la <b>Imagen</b> de perfil, ha ocurrido el error.<p>' . print_r($this->upload->display_errors('<p>', '</p>'), true) . '</p>');
+    }
+    redirect('editor/modificarPerfil');
+  }
+
+  /**
+   * Método para cambiar los datos personales (nombre,apellidos,email)
+   *
+   * @return void
+   */
+  public function cambiarDatos()
+  {
+    // Formateamos los datos pasados
+    $_POST['nombre'] = $this->funciones->trimPrimPalbMayus($_POST['nombre']);
+    $_POST['apellidos'] = $this->funciones->trimPrimPalbMayus($_POST['apellidos']);
+    $_POST['email'] = $this->funciones->trimMinus($_POST['email']);
+    $this->editores_m->cambiarDatos($_POST, $_SESSION['id']);
+    $this->alertas->add('<b>Datos</b> personales actualizados con éxito.', 'success');
+    redirect('editor/modificarPerfil');
+  }
+
+  /**
+   * Función llammada por ajax que comprobará si [currentpass] es igual a la actual,
+   * si lo es la cambiará por[password]
+   *
+   * @return JSON, un array asociativo el primer valore es 1 si es correcto, 0 en caso contrario,
+   * el segundo valor es la alerta
+   */
+  public function cambiarPassword()
+  {
+    // Comprobamos que la contraseña actual se haya introducido correctamente
+    $currentPass = $this->editores_m->getPassword($_SESSION['id']);
+    if (password_verify($_POST['currentpass'], $currentPass)) {
+      // Si es correcta actualizamos la contraseña y devolvemos un JSON
+      $pass = password_hash($_POST['password'], PASSWORD_ARGON2I);
+      $this->editores_m->cambiarPassword($pass, $_SESSION['id']);
+
+      $alerta = '<div class="alert alert-success" role="alert"><b>Contraseña</b> cambiada con éxito.</div>';
+      echo (json_encode([1, $alerta]));
+    } else {
+      // Si la contraseña es incorrecta
+      $alerta = '<div class="alert alert-danger" role="alert">La <b>Contraseña actual</b> no es correcta.</div>';
+      echo (json_encode([0, $alerta]));
+    }
+  }
+
+  ### Metodos solo para el admin ###
+  ##################################
 
   /**
    * Carga la vista categoria
@@ -438,12 +550,6 @@ class Editor extends CI_Controller
 
 
     $this->load->view('template_editor', $datos);
-  }
-
-  public function adminEditores()
-  {
-    $this->comprobarAdmin();
-  # code...
   }
 
   /**

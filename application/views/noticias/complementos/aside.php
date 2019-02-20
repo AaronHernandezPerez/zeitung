@@ -5,12 +5,15 @@
   <div class="card rounded-0 shadow-sm">
     <h5 class="card-header">Búsqueda</h5>
     <div class="card-body">
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="PHP ...">
-        <span class="input-group-btn">
-          <button class="btn btn-secondary" type="button">Buscar</button>
-        </span>
-      </div>
+      <form action="<?= base_url('noticias/buscar') ?>" method="POST">
+        <div class="input-group">
+          <input required type="search" name="busqueda" class="form-control" placeholder="PHP ..."
+            value="<?= (isset($busqueda)) ? $busqueda : ''; ?>">
+          <span class="input-group-btn">
+            <button class="btn btn-secondary">Buscar</button>
+          </span>
+        </div>
+      </form>
     </div>
   </div>
 

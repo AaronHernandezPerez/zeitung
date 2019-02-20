@@ -32,9 +32,9 @@ $(function () {
   $('.passwd').on('input', function () {
     // Primero comprobamos que tengan almenos 6 carácteres
     $this = $(this);
-    if (this.value.length < 6) {
+    if (this.value.length < 5) {
       $this.addClass('is-invalid')
-      $this.next('.invalid-feedback').text('La contraseña debe tener al menos 6 caracteres.')
+      $this.next('.invalid-feedback').text('La contraseña debe tener al menos 5 caracteres.')
     } else {
       $this.removeClass('is-invalid');
       // Si las 2 tienen valor y no son iguales
