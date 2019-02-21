@@ -36,5 +36,4 @@ class Categorias_m extends CI_Model
       ->update('categorias');
   }
 }
-
-?>
+ 

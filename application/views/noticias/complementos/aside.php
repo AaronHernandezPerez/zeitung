@@ -1,5 +1,5 @@
 <!-- Sidebar Widget -->
-<div class="col-md-4 mt-5 mt-lg-0">
+<div class="col-md-4 mt-5 mt-md-0">
 
   <!-- Widget de búsqueda -->
   <div class="card rounded-0 shadow-sm">

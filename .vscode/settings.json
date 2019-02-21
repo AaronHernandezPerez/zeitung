@@ -4,6 +4,7 @@
       "/.vscode/*",
       "/.git/*",
       "/.git*",
+      "/application/config*",
       "/.htaccess",
       "/application/config/*"
     ],
@@ -25,7 +26,7 @@
         ],
         "connected": [
           // "rm -rf /home/aaronh/public_html/zeitung/*"
-          "find /home/aaronh/public_html/zeitung -not -path '/home/aaronh/public_html/zeitung' -not -path '*/zeitung/.htaccess' -not -path '*/zeitung/application/config*' -delete"
+          // "find /home/aaronh/public_html/zeitung -not -path '/home/aaronh/public_html/zeitung' -not -path '*/zeitung/.htaccess' -not -path '*/zeitung/application/config*' -delete"
         ]
       }
     ]

@@ -204,6 +204,51 @@ class Noticias_m extends CI_Model
       ->order_by('fecha', 'DESC')
       ->get()->result();
   }
-}
 
-?>
+  /* Metodos para las estaísticas */
+  /**
+   * Obtiene las noticias de este año
+   *
+   * @param string $id
+   * @return array de objetos con la noticia
+   */
+  public function noticiasPublicadasChart($idAutor)
+  {
+    $year=date('Y');
+    return $this->db->select('fecha')
+    ->where('autor',$idAutor)
+    ->like('fecha',$year)
+    ->get('noticias')->result();
+  }
+
+  /**
+   * obtiene el nombre de la categoria de cada notiica
+   *
+   * @param string $idAutor
+   * @return array
+   */
+  public function categoriasPublicadasChart ($idAutor)
+  {
+    $year=date('Y');
+    return $this->db->select('(SELECT nombre FROM categorias WHERE noticias.categoria = categorias.id) categoria')
+    ->where('autor',$idAutor)
+    ->like('fecha',$year)
+    ->get('noticias')->result();
+  }
+
+    /**
+   * Obtiene el numero de comentarios por noticia
+   *
+   * @param string $id
+   * @return array de objetos con la noticia
+   */
+  public function comentariosChart($idAutor)
+  {
+    $year=date('Y');
+    return $this->db->select('noticias.fecha,(SELECT COUNT(*) FROM comentarios WHERE comentarios.noticia = noticias.id) comentarios')
+    ->where('autor',$idAutor)
+    ->like('fecha',$year)
+    ->get('noticias')->result();
+  }
+}
+ 

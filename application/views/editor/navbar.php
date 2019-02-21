@@ -71,5 +71,6 @@ $img = $this->editores_m->obtenerImagen($_SESSION['id']);
   </div>
 </nav>
 
+<script src="<?= base_url('assets/libraries/canvasjs/canvasjs.min.js') ?>"></script>
 <script src="<?= base_url('assets/libraries/chartjs/moment-with-locales.js') ?>"></script>
 <script src="<?= base_url('assets/libraries/chartjs/Chart.bundle.js') ?>"></script>

@@ -36,6 +36,87 @@ class Editor extends CI_Controller
     $this->load->view('template_editor', $datos);
   }
 
+  /* Funciones para las estadísticas */
+
+  /**
+   * Devuelve un array con 12 campos, indicando las noticias publicadas por mes
+   *
+   * @return string
+   */
+  public function noticiasPublicadasChart()
+  {
+    $datosMes = array();
+    // Recorremos el array 12 veces creando pars de clave ->valor
+    for ($i = 0; $i < 12; $i++) {
+      $datosMes[$i] = 0;
+    }
+
+    $this->load->model('noticias_m');
+    $noticias = $this->noticias_m->noticiasPublicadasChart($_SESSION['id']);
+
+    // recorremos las noticias obtenidas sumando una noticia por mes
+    foreach ($noticias as  $value) {
+      // se suma 1 a su correspondiente mes
+      $datosMes[date('n', strtotime($value->fecha))]++;
+    }
+
+    echo json_encode(array_values($datosMes));
+  }
+
+  /**
+   * Devuelve un array con todas las categorias y las noticias en cada una
+   *
+   * @return void
+   */
+  public function categoriasPublicadasChart()
+  {
+    // Primero obtenemos las categorias
+    $this->load->model('categorias_m');
+    $categorias = $this->categorias_m->obtenerCategorias();
+
+    $datosCategorias = array();
+    // Recorremos todas las categorias y las entroducimos en un array asociativo
+    foreach ($categorias as $value) {
+      $datosCategorias[$value->nombre] = 0;
+    }
+
+    // Obtenemos sus noticias
+    $this->load->model('noticias_m');
+    $noticias = $this->noticias_m->categoriasPublicadasChart($_SESSION['id']);
+    foreach ($noticias as $value) {
+      $datosCategorias[$value->categoria]++;
+    }
+
+    echo json_encode($datosCategorias);
+  }
+
+  /**
+   * Devuelve un array con 12 campos, los comentarios por mes
+   *
+   * @return string
+   */
+  public function comentariosChart()
+  {
+    $datosMes = array();
+    // Recorremos el array 12 veces creando pars de clave ->valor
+    for ($i = 0; $i < 12; $i++) {
+      $datosMes[$i] = 0;
+    }
+
+    $this->load->model('noticias_m');
+    $noticias = $this->noticias_m->comentariosChart($_SESSION['id']);
+
+    // recorremos las noticias obtenidas sumando una noticia por mes
+    foreach ($noticias as  $value) {
+      // se suma 1 a su correspondiente mes
+      $datosMes[date('n', strtotime($value->fecha))] += $value->comentarios;
+    }
+
+    echo json_encode(array_values($datosMes));
+  }
+
+  /* Fin de las funciones de las estadísticas */
+
   public function publicarNoticia()
   {
     $datos['titulo'] = "Editor {$_SESSION['username']}";
@@ -125,7 +206,7 @@ class Editor extends CI_Controller
 
     $datos['miJS'] = ['js/noticias-seleccionar.js'];
     $datos['miCSS'] = 'noticias-seleccionar.css';
-    
+
     // Cargamos la paginación
     $this->load->library('pagination');
     $totalNoticias = $this->noticias_m->obtenerNumeroNoticiasEditor($_SESSION['id']);
@@ -155,7 +236,7 @@ class Editor extends CI_Controller
     foreach ($_POST['id'] as $value) {
       $this->comentarios_m->eliminarComentario(['id' => $value]);
     }
-    
+
     // Redireccionamos con un mensaje de información
     $this->alertas->add("Los <b>comentarios</b> han sido eliminados con éxito", 'success');
     redirect('editor/' . $_SESSION['volver']);
@@ -215,7 +296,7 @@ class Editor extends CI_Controller
     if ($datos['noticia']) {
       $datos['contenido'] = 'editor/noticias-editar.php';
       $datos['miJS'] = ['js/publicar-noticias.js'];
-      
+
       // Categorias
       $this->load->model('categorias_m');
       $datos['categorias'] = $this->categorias_m->obtenerCategorias();
@@ -407,7 +488,7 @@ class Editor extends CI_Controller
       if ($anteriorImg != 'editores\m-icon.png') {
         unlink('./assets/img/' . $anteriorImg);
       }
-      
+
       // Movemos la imagen guardada fuera de temporal
       rename($config['upload_path'] . $datosFichero['file_name'], './assets/img/editores/' . $datosFichero['file_name']);
 
