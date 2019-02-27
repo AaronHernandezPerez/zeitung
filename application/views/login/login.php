@@ -84,7 +84,7 @@ h4 {
 
           <div class="row px-5">
             <button class="btn btn-success btn-block">Iniciar Sesión</button>
-            <a href="<?php echo base_url() ?>login/registro" class="btn btn-primary btn-block">Registrarse</a>
+            <a href="<?php echo base_url() ?>login/solicitar" class="btn btn-primary btn-block">Mandar solicitud</a>
             <a href="<?php echo base_url() ?>" class="btn btn-dark btn-block">Volver</a>
           </div>
         </form>
@@ -94,7 +94,6 @@ h4 {
 
   <div id="left" class="col-md-6 d-flex align-items-center">
     <h4 class="display-4 text-white shadow text-j p-4 my-1">El afortunado hallazgo de un solo libro puede cambiar el
-      destino
-      de un hombre.</h4>
+      destino de un hombre.</h4>
   </div>
 </div>

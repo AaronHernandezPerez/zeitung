@@ -5,7 +5,9 @@
 
 <div class="card shadow">
   <div class="card-body">
-    <h3 class="card-title"><?php echo $cardTitle ?></h3>
+    <h3 class="card-title">
+      <?php echo $cardTitle ?>
+    </h3>
     <form method="post" action="<?php echo base_url() ?>editor/actualizarNoticia">
       <input type="hidden" name="id" value="<?php echo $noticia->id ?>">
       <div class="form-group">
@@ -18,9 +20,10 @@
         <label for="categoria">Selecciona la categoria</label>
         <select id="categoria" name="categoria" class="form-control">
           <!-- Rellenado dinamicamente con php -->
-          <?php foreach ($categorias as $value) : ?>
-          <option value="<?php echo $value->id ?>" <?php if ($noticia->categoria == $value->id) : ?> selected
-            <?php endif ?>> <?php echo $value->nombre ?>
+          <?php foreach ($categorias as $value): ?>
+          <option value="<?php echo $value->id ?>" <?php if ($noticia->categoria == $value->id): ?> selected
+            <?php endif ?>>
+            <?php echo $value->nombre ?>
           </option>
           <?php endforeach ?>
         </select>

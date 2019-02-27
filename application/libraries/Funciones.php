@@ -121,6 +121,8 @@ class Funciones
     $config['full_tag_open'] = '<ul class="pagination  pagination-lg">';
     $config['full_tag_close'] = '</ul>';
     $config['attributes'] = ['class' => 'page-link'];
+    $config['first_link'] = false;
+    $config['last_link'] = false;
     $config['prev_link'] = 'Mas nuevas';
     $config['prev_tag_open'] = '<li class="page-item">';
     $config['prev_tag_close'] = '</li>';

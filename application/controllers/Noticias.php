@@ -23,6 +23,7 @@ class Noticias extends CI_Controller
   {
     $datos['titulo'] = "Zeitung, el peridico de cada dia.";
     $datos['contenido'] = 'noticias/index.php';
+    $datos['miJS'] = ['libraries/jqcloud/jqcloud.js', 'js/noticias.js'];
     // Cargamos las categorias
     $this->load->model('categorias_m');
     $categorias = $this->funciones->soloValores($this->categorias_m->obtenerNombreCategoriasArr());
@@ -35,7 +36,7 @@ class Noticias extends CI_Controller
     // Cargamos los datos de las noticias dependiendo de que se haya pasado por la url
     $this->load->model('noticias_m');
     $limite = 5; // Limite de noticias por Página
-    
+
     // Cargamos la paginación
     $this->load->library('pagination');
     // Cargamos las noticias 
@@ -68,7 +69,8 @@ class Noticias extends CI_Controller
     setlocale(LC_ALL, 'es_ES');
     $datos['titulo'] = "Zeitung, el peridico de cada dia.";
     $datos['contenido'] = 'noticias/leer.php';
-    $datos['miJS'] = ['js/alto-videos-quill.js', 'js/add-comentarios.js'];
+    $datos['miJS'] = ['js/alto-videos-quill.js', 'js/add-comentarios.js', 'libraries/jqcloud/jqcloud.js', 'js/noticias.js'];
+
     $this->load->model('categorias_m');
     $categorias = $this->funciones->soloValores($this->categorias_m->obtenerNombreCategoriasArr());
     $datos['categorias'] = $categorias;
@@ -120,7 +122,8 @@ class Noticias extends CI_Controller
 
     $datos['titulo'] = 'Perfil de ' . $datos['editor']->nombre . '.';
     $datos['contenido'] = 'noticias/perfil.php';
-    
+    $datos['miJS'] = ['libraries/jqcloud/jqcloud.js', 'js/noticias.js'];
+
     // Cargamos las categorias
     $this->load->model('categorias_m');
     $categorias = $this->funciones->soloValores($this->categorias_m->obtenerNombreCategoriasArr());
@@ -142,6 +145,7 @@ class Noticias extends CI_Controller
   {
     $datos['titulo'] = "Zeitung, el peridico de cada dia.";
     $datos['contenido'] = 'noticias/index.php';
+    $datos['miJS'] = ['libraries/jqcloud/jqcloud.js', 'js/noticias.js'];
 
     // Cargamos las categorias
     $this->load->model('categorias_m');
@@ -150,11 +154,41 @@ class Noticias extends CI_Controller
 
     $datos['contenido'] = 'noticias/buscar.php';
 
+    // Limpiamos la búsqueda
+    $_GET['busqueda'] = $this->funciones->trimPrimLetrMayus($_GET['busqueda']);
     // Cargamos las noticias haciendo una búsqueda full text
     $this->load->model('noticias_m');
-    $datos['noticias'] = $this->noticias_m->busquedaFullText($_POST['busqueda']);
-    $datos['busqueda'] = $_POST['busqueda'];
+    $datos['noticias'] = $this->noticias_m->busquedaFullText($_GET['busqueda']);
+    // Se le sumarán las que contengan dicho tag
+    $datos['noticias'] = array_merge($datos['noticias'], $this->noticias_m->busquedaTags($_GET['busqueda']));
+
+    // Eliminamos los repetidos
+    // print_r($datos['noticias']);
+    $resultados = array();
+    foreach ($datos['noticias'] as $key => $objeto) {
+      if (in_array($objeto->id, $resultados)) {
+        unset($datos['noticias'][$key]);
+      } else {
+        array_push($resultados, $objeto->id);
+      }
+    }
+
+
+    $datos['busqueda'] = $_GET['busqueda'];
 
     $this->load->view('template_noticias', $datos);
+  }
+
+
+  /**
+   * Devuelve las 6 tags mas utilizadas de este mes
+   *
+   * @return string array
+   */
+  public function tagsCloud()
+  {
+    $this->load->model('tags_m');
+    $tags = $this->tags_m->tagsCloud();
+    echo json_encode($tags);
   }
 }

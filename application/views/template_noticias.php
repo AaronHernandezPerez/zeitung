@@ -68,11 +68,11 @@ a.nav-link {
 }
 </style>
 <!-- Inicio del contenido -->
+<link rel="stylesheet" href="<?= base_url('assets/libraries/jqcloud/jqcloud.css') ?>">
 <div id="contenedor" class="container mt-5">
   <?php $this->load->view($contenido); ?>
 </div>
 <!-- fin del container y contenido -->
-
 <?php
 $this->load->view('noticias/complementos/footer.php');
 $this->load->view('templates/htmlFin.php');

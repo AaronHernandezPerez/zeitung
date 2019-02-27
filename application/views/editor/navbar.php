@@ -45,6 +45,7 @@ $img = $this->editores_m->obtenerImagen($_SESSION['id']);
             <a class="nav-link" href="<?php echo base_url() ?>editor/categoria">Admin categorias</a>
             <div class="dropdown-divider"></div>
             <a class="nav-link" href="<?php echo base_url() ?>editor/adminNoticias">Admin Noticias</a>
+            <a class="nav-link" href="<?php echo base_url() ?>editor/adminSolicitudes">Admin Solicitudes</a>
           </div>
         </li>
         <?php endif; ?>
@@ -60,6 +61,8 @@ $img = $this->editores_m->obtenerImagen($_SESSION['id']);
           <div class="dropdown-menu bg-dark px-1 px-sm-0" aria-labelledby="navbarDropdown">
             <a class="nav-link" href="<?php echo base_url() ?>editor/modificarPerfil">Modificar perfil</a>
             <div class="dropdown-divider"></div>
+            <a class="nav-link" href="<?php echo base_url() ?>">Zeitung</a>
+            <div class="dropdown-divider"></div>
             <a class="nav-link" href="<?php echo base_url() ?>editor/cerrarSesion">Cerrar Sesión</a>
           </div>
         </li>
@@ -71,6 +74,5 @@ $img = $this->editores_m->obtenerImagen($_SESSION['id']);
   </div>
 </nav>
 
-<script src="<?= base_url('assets/libraries/canvasjs/canvasjs.min.js') ?>"></script>
 <script src="<?= base_url('assets/libraries/chartjs/moment-with-locales.js') ?>"></script>
 <script src="<?= base_url('assets/libraries/chartjs/Chart.bundle.js') ?>"></script>

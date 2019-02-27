@@ -22,7 +22,7 @@ canvas {
   <div class="col-md-8">
     <div class="card shadow h-100">
       <div class="card-body">
-        <h3 class="card-title">Noticias publicadas</h3>
+        <h3 class="card-title">Comentarios por mes</h3>
         <canvas id="comentp"></canvas>
       </div>
     </div>

@@ -1,36 +1,38 @@
 <style>
-  @keyframes shake {
+@keyframes shake {
 
-    10%,
-    90% {
-      transform: translate3d(-1px, 0, 0);
-    }
-
-    20%,
-    80% {
-      transform: translate3d(2px, 0, 0);
-    }
-
-    30%,
-    50%,
-    70% {
-      transform: translate3d(-4px, 0, 0);
-    }
-
-    40%,
-    60% {
-      transform: translate3d(4px, 0, 0);
-    }
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
   }
 
-  .shake {
-    animation: shake 0.5s;
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
   }
+
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%,
+  60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
+.shake {
+  animation: shake 0.5s;
+}
 </style>
 
 <div class="card">
   <div class="card-body">
-    <h3 class="card-title">Datos de <?= $_SESSION['username'] ?></h3>
+    <h3 class="card-title">Datos de
+      <?= $_SESSION['username'] ?>
+    </h3>
 
     <!-- Imagen -->
     <div class="row border p-2 mb-3">
@@ -38,6 +40,10 @@
         <h5 class="text-center">Imagen de perfil</h5>
         <img class="img-thumbnail rounded-circle mx-auto d-block"
           src="<?= base_url('assets/img/') . $editor->imagen_p ?>" alt="" width="50%">
+        <form action="<?= base_url('editor/quitarImagen') ?>" method="post">
+          <input type="hidden" name="quitar" value="1">
+          <button class="btn btn-secondary btn-block mt-2" type="submit">Quitar Imagen</button>
+        </form>
       </div>
       <div class="col-md-6">
         <form action="<?= base_url('editor/cambiarImagen') ?>" method="post" enctype="multipart/form-data"

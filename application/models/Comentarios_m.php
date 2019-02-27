@@ -1,6 +1,9 @@
 <?php 
 defined('BASEPATH') or exit('No direct script access allowed');
 
+/**
+ * Clase para manejar la tabla comentarios de la BBDD
+ */
 class Comentarios_m extends CI_Model
 {
   /**
@@ -40,7 +43,5 @@ class Comentarios_m extends CI_Model
   {
     $this->db->delete('comentarios', $datos);
   }
-
 }
-
-?>
+ 

@@ -5,12 +5,14 @@
 const notp = $("#notp");
 $.post(`${BASE_URL}editor/noticiasPublicadasChart`,
   function (datos) {
+    console.log(datos);
+
     new Chart(notp, {
       type: 'line',
       data: {
         labels: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
         datasets: [{
-          label: "Earnings",
+          label: "Publicaciones",
           lineTension: 0.3,
           backgroundColor: "rgba(78, 115, 223, 0.05)",
           borderColor: "rgba(78, 115, 223, 1)",
@@ -86,14 +88,15 @@ $.post(`${BASE_URL}editor/noticiasPublicadasChart`,
   }
 );
 
+$(function name(params) {
 
+});
 /* Donut de Categorias */
 const catp = $('#catp');
 
 $.post(`${BASE_URL}editor/categoriasPublicadasChart`,
   function (datos) {
-    console.log(datos);
-
+    datos = JSON.parse(datos);
     new Chart(catp, {
       type: 'doughnut',
       data: {
@@ -107,13 +110,11 @@ $.post(`${BASE_URL}editor/categoriasPublicadasChart`,
             "#FF7043",
             "#78909C"
           ],
-          label: 'Dataset 1'
         }],
         labels: Object.keys(datos)
       },
       options: {
         responsive: true,
-        maintainAspectRatio: true,
         legend: {
           position: 'top',
         },
@@ -142,27 +143,25 @@ $.post(`${BASE_URL}editor/categoriasPublicadasChart`,
 );
 
 
-
 // Linea de comentario
 const comentp = $("#comentp");
 $.post(`${BASE_URL}editor/comentariosChart`,
   function (datos) {
-
     new Chart(comentp, {
       type: 'line',
       data: {
         labels: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
         datasets: [{
-          label: "Earnings",
+          label: "Comentarios",
           lineTension: 0.3,
-          backgroundColor: "rgba(78, 115, 223, 0.05)",
-          borderColor: "rgba(78, 115, 223, 1)",
+          backgroundColor: "#E0E0E0",
+          borderColor: "#212121",
           pointRadius: 3,
-          pointBackgroundColor: "rgba(78, 115, 223, 1)",
-          pointBorderColor: "rgba(78, 115, 223, 1)",
+          pointBackgroundColor: "#212121",
+          pointBorderColor: "#212121",
           pointHoverRadius: 3,
-          pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
-          pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+          pointHoverBackgroundColor: "#212121",
+          pointHoverBorderColor: "#212121",
           pointHitRadius: 10,
           pointBorderWidth: 2,
           data: JSON.parse(datos),

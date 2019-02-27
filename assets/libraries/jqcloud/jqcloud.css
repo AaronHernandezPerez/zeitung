@@ -1,0 +1,79 @@
+/*!
+ * jQCloud 2.0.3
+ * Copyright 2011 Luca Ongaro (http://www.lucaongaro.eu)
+ * Copyright 2013 Daniel White (http://www.developerdan.com)
+ * Copyright 2014-2017 Damien "Mistic" Sorel (http://www.strangeplanet.fr)
+ * Licensed under MIT (http://opensource.org/licenses/MIT)
+ */
+
+.jqcloud {
+  font: 10px "Helvetica", "Arial", sans-serif;
+  line-height: normal;
+  overflow: hidden;
+  position: relative;
+}
+
+.jqcloud-word {
+  margin: 0;
+  padding: 0;
+}
+
+.jqcloud-word.w1 {
+  color: #aab5f0;
+  font-size: 1em;
+}
+
+.jqcloud-word.w2 {
+  color: #99ccee;
+  font-size: 1.1em;
+}
+
+.jqcloud-word.w3 {
+  color: #a0ddff;
+  font-size: 1.2em;
+}
+
+.jqcloud-word.w4 {
+  color: #90c5f0;
+  font-size: 1.3em;
+}
+
+.jqcloud-word.w5 {
+  color: #90a0dd;
+  font-size: 1.4em;
+}
+
+.jqcloud-word.w6 {
+  color: #90c5f0;
+  font-size: 1.5em;
+}
+
+.jqcloud-word.w7 {
+  color: #3399dd;
+  font-size: 1.6em;
+}
+
+.jqcloud-word.w8 {
+  color: #00ccff;
+  font-size: 1.7em;
+}
+
+.jqcloud-word.w9 {
+  color: #00ccff;
+  font-size: 1.8em;
+}
+
+.jqcloud-word.w10 {
+  color: #00ccff;
+  font-size: 2em;
+}
+
+.jqcloud-word a {
+  color: inherit;
+  font-size: inherit;
+  text-decoration: none;
+}
+
+.jqcloud-word a:hover {
+  color: #00ccff;
+}

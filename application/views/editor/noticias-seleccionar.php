@@ -15,8 +15,8 @@
         <?php foreach ($noticias as $value) : ?>
         <tr>
           <td>
-            <a class="enlaceTitulo px-2"
-              href="<?php echo base_url() . "editor/modificarNoticia/{$value->id}" ?>"><?php echo $value->titulo ?></a>
+            <a class="enlaceTitulo px-2" href="<?php echo base_url() . "editor/modificarNoticia/{$value->id}" ?>">
+              <?php echo $value->titulo ?></a>
           </td>
           <td>
             <p class="my-2">
@@ -27,12 +27,14 @@
             <div class="d-flex justify-content-center my-2">
               <?php if ($value->comentarios == 0) : ?>
               <button class="btn btn-outline-primary btn-coment" type="button">
-                <i class="far fa-comments"></i> <span class="badge badge-dark"><?= $value->comentarios ?></span>
+                <i class="far fa-comments"></i> <span class="badge badge-dark">
+                  <?= $value->comentarios ?></span>
               </button>
               <?php else : ?>
               <a href="<?php echo base_url() . "editor/moderarComentarios/{$value->id}" ?>"
                 class="btn btn-outline-primary" role="button">
-                <i class="far fa-comments"></i> <span class="badge badge-dark"><?= $value->comentarios ?></span>
+                <i class="far fa-comments"></i> <span class="badge badge-dark">
+                  <?= $value->comentarios ?></span>
               </a>
               <?php endif; ?>
             </div>

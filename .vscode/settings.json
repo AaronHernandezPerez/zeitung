@@ -2,31 +2,34 @@
   "deploy": {
     "ignore": [
       "/.vscode/*",
-      "/.git/*",
-      "/.git*",
+      "/user_guide/*",
+      "/user_guide*",
       "/application/config*",
+      "/application/config/*",
       "/.htaccess",
-      "/application/config/*"
     ],
     "targets": [
       {
         "type": "sftp",
         "name": "Zeitung",
         "description": "Periodico Zeitung",
-        "dir": "/home/aaronh/public_html/zeitung",
+        "dir": "/home/aaronh/public_html",
         "host": "192.168.100.20",
         "port": 22,
         "user": "aaronh",
         "password": "danieldasasco",
         "mappings": [
           {
-            "source": "F:/JavaScipt/zeitung",
-            "target": "/home/aaronh/public_html/zeitung"
+            "source": "F:/JavaScipt/zeitung/*",
+            "target": "/home/aaronh/public_html"
           }
         ],
         "connected": [
           // "rm -rf /home/aaronh/public_html/zeitung/*"
           // "find /home/aaronh/public_html/zeitung -not -path '/home/aaronh/public_html/zeitung' -not -path '*/zeitung/.htaccess' -not -path '*/zeitung/application/config*' -delete"
+          // "mkdir /home/aaronh/public_html/zeitung/assets/img/editores/timporal",
+          // "chmod 777 /home/aaronh/public_html/zeitung/assets/img/editores/ -r"
+          // "chown aaronh:aaronh /home/aaronh/public_html/zeitung/assets/img/editores/ -r
         ]
       }
     ]

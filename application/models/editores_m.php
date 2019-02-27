@@ -3,11 +3,23 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Editores_m extends CI_Model
 {
+  /**
+   * Guarda el editor en la BBDD
+   *
+   * @param array $datos
+   * @return void
+   */
   public function registrarEditor($datos)
   {
     $this->db->insert('editores', $datos);
   }
 
+  /**
+   * Obtiene los datos necesarios para loguear al editor
+   *
+   * @param string $username
+   * @return array
+   */
   public function obtenerDatosLogin($username)
   {
     $query = $this->db->select('id,username,administrador,password')
@@ -16,6 +28,12 @@ class Editores_m extends CI_Model
     return $query->row();
   }
 
+  /**
+   * Obtiene el username de un editor a partir de su id
+   *
+   * @param string $idEditor
+   * @return string
+   */
   public function obtenerUsername($idEditor)
   {
     return $this->db->select('username')
@@ -23,6 +41,12 @@ class Editores_m extends CI_Model
       ->get('editores')->row()->username;
   }
 
+  /**
+   * Obtiene toda la tupla del editor
+   *
+   * @param string $idEditor
+   * @return array
+   */
   public function obtenerTodoEditor($idEditor)
   {
     return $this->db->where('id', $idEditor)->get('editores')->row();
@@ -33,7 +57,7 @@ class Editores_m extends CI_Model
    *
    * @param string $campo, puede ser username o email
    * @param string $valor el valor a buscar en la BBDD
-   * @return void
+   * @return array
    */
   public function validacionesR($campo, $valor)
   {
@@ -46,7 +70,7 @@ class Editores_m extends CI_Model
    * Obtiene la ruta de la imagen de un editor
    *
    * @param string $idEditor
-   * @return void
+   * @return array
    */
   public function obtenerImagen($idEditor)
   {
@@ -83,6 +107,12 @@ class Editores_m extends CI_Model
       ->update('editores', $datos);
   }
 
+  /**
+   * Devuelve la contaseña actual del editor
+   *
+   * @param string $idEditor
+   * @return string
+   */
   public function getPassword($idEditor)
   {
     return $this->db->select('password')
@@ -90,7 +120,13 @@ class Editores_m extends CI_Model
       ->get('editores')->row()->password;
   }
 
-
+  /**
+   * Cambia la contaseña de un editor
+   *
+   * @param string $password
+   * @param string $idEditor
+   * @return void
+   */
   public function cambiarPassword($password, $idEditor)
   {
     $this->db->where('id', $idEditor)
@@ -98,5 +134,3 @@ class Editores_m extends CI_Model
       ->update('editores');
   }
 }
-
-?>

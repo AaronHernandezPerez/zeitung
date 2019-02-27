@@ -5,7 +5,7 @@
   <div class="card rounded-0 shadow-sm">
     <h5 class="card-header">Búsqueda</h5>
     <div class="card-body">
-      <form action="<?= base_url('noticias/buscar') ?>" method="POST">
+      <form action="<?= base_url('noticias/buscar') ?>" method="get">
         <div class="input-group">
           <input required type="search" name="busqueda" class="form-control" placeholder="PHP ..."
             value="<?= (isset($busqueda)) ? $busqueda : ''; ?>">
@@ -21,33 +21,7 @@
   <div class="card rounded-0 shadow-sm my-4">
     <h5 class="card-header">Tags</h5>
     <div class="card-body">
-      <div class="row">
-        <div class="col-lg-6">
-          <ul class="list-unstyled mb-0">
-            <li>
-              <a href="#">Web Design</a>
-            </li>
-            <li>
-              <a href="#">HTML</a>
-            </li>
-            <li>
-              <a href="#">Dani</a>
-            </li>
-          </ul>
-        </div>
-        <div class="col-lg-6">
-          <ul class="list-unstyled mb-0">
-            <li>
-              <a href="#">JavaScript</a>
-            </li>
-            <li>
-              <a href="#">CSS</a>
-            </li>
-            <li>
-              <a href="#">Tutoriales</a>
-            </li>
-          </ul>
-        </div>
+      <div id="tags">
       </div>
     </div>
   </div>

@@ -32,12 +32,26 @@ class Login extends CI_Controller
   }
 
   /**
-   * Vista del registro de usuarios
+   * Vista del registro de usuarios, se atocompletarán los campos
+   * introducidos al solicitar el registro
    *
-   * @return void
+   * @return html
    */
-  public function registro()
+  public function registro($token)
   {
+    // Comprobamos que la token exista, sino redireccionamos
+    $this->load->model('solicitudes_m');
+    $datos['solicitud'] = $this->solicitudes_m->obtenerSolicitudPorToken($token);
+    if (!$datos['solicitud']) {
+      $this->alertas->add("La <b>url de registro</b> no es correcta");
+      redirect('login');
+      die;
+    }
+    // Preparamos el nombre de la solicitud
+    $datos['solicitud']->nombre = explode(' ', $datos['solicitud']->nombre);
+
+    $test = array();
+    echo (array_shift($test));
     $datos['titulo'] = 'Registro de Periodista';
     $datos['contenido'] = 'login/registro.php';
     $datos['miJS'] = ['js/registro.js'];
@@ -60,15 +74,22 @@ class Login extends CI_Controller
     // Por ultimo encriptamos la contraseña con Argon2
     $_POST['password'] = password_hash($_POST['password'], PASSWORD_ARGON2I);
 
+    // Borramos el token registrado
+    $this->load->model('solicitudes_m');
+    $this->solicitudes_m->eliminarSolicitudToken($_POST['token']);
+
+    // Eliminamos el valor del captcha-response y el token antes de registrarlo
+    unset($_POST['g-recaptcha-response']);
+    unset($_POST['token']);
+
     // Importamoos el modelo y lo llamamos con los datos guardados
     $this->load->model('editores_m');
-
-    // Eliminamos el valor del captcha-response antes de registrarlo
-    unset($_POST['g-recaptcha-response']);
     $this->editores_m->registrarEditor($_POST);
-    
+
     // Iniciamos sesión
     $this->autenticarEditor($_POST['username']);
+
+
 
     // Y lo redirigimos al editor
     redirect('editor');
@@ -98,7 +119,7 @@ class Login extends CI_Controller
         redirect('login');
       }
     } else {
-        // Si no mostramos su correspondiente mensaje de error y volvemos a login
+      // Si no mostramos su correspondiente mensaje de error y volvemos a login
       $this->alertas->add("El usuario <b>{$_POST['username']}</b> no existe");
       redirect('login');
     }
@@ -117,7 +138,7 @@ class Login extends CI_Controller
     if ($resultado = $this->editores_m->obtenerDatosLogin($usuario)) {
       $_SESSION['id'] = $resultado->id;
       $_SESSION['username'] = $resultado->username;
-      
+
       // Para las opciones de administador
       if ($resultado->administrador == 1) {
         $_SESSION['admin'] = true;
@@ -136,13 +157,42 @@ class Login extends CI_Controller
   {
     $this->load->model('editores_m');
 
-      // Cualquier valor menos el email
+    // Cualquier valor menos el email
     if ($test = $this->editores_m->validacionesR($_POST['campo'], $_POST['valor'])) {
-        // Si está en la BBDD
+      // Si está en la BBDD
       echo (0);
     } else {
-        // Si no esta en la BBDD
+      // Si no esta en la BBDD
       echo (1);
     }
   }
+
+  /**
+   * Página para solicitar el registro 
+   *
+   * @return html
+   */
+  public function solicitar()
+  {
+    $datos['titulo'] = 'Mándanos tu candidatura';
+    $datos['contenido'] = 'login/solicitar.php';
+    $this->load->view('template_login', $datos);
+  }
+
+  /**
+   * Guarda la solicitud en la BBDD para ser aprovada o no por un administrador
+   *
+   * @return void
+   */
+  public function enviarSolicitud()
+  {
+    // Guardamos la solicitud en la BBDD
+    $this->load->model('solicitudes_m');
+    $_POST['nombre'] = $this->funciones->trimPrimPalbMayus($_POST['nombre']);
+    $this->solicitudes_m->guardarSolicitud($_POST);
+
+    $this->alertas->add("<b>Solicitud</b> enviada con éxito", 'success');
+    redirect('login');
+  }
 }
+?>

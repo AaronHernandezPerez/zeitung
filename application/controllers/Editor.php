@@ -46,7 +46,7 @@ class Editor extends CI_Controller
   public function noticiasPublicadasChart()
   {
     $datosMes = array();
-    // Recorremos el array 12 veces creando pars de clave ->valor
+    // Recorremos el array 12 veces creando paress de clave ->valor
     for ($i = 0; $i < 12; $i++) {
       $datosMes[$i] = 0;
     }
@@ -55,7 +55,7 @@ class Editor extends CI_Controller
     $noticias = $this->noticias_m->noticiasPublicadasChart($_SESSION['id']);
 
     // recorremos las noticias obtenidas sumando una noticia por mes
-    foreach ($noticias as  $value) {
+    foreach ($noticias as $value) {
       // se suma 1 a su correspondiente mes
       $datosMes[date('n', strtotime($value->fecha))]++;
     }
@@ -98,7 +98,7 @@ class Editor extends CI_Controller
   public function comentariosChart()
   {
     $datosMes = array();
-    // Recorremos el array 12 veces creando pars de clave ->valor
+    // Recorremos el array 12 veces creando pares de clave ->valor
     for ($i = 0; $i < 12; $i++) {
       $datosMes[$i] = 0;
     }
@@ -107,7 +107,7 @@ class Editor extends CI_Controller
     $noticias = $this->noticias_m->comentariosChart($_SESSION['id']);
 
     // recorremos las noticias obtenidas sumando una noticia por mes
-    foreach ($noticias as  $value) {
+    foreach ($noticias as $value) {
       // se suma 1 a su correspondiente mes
       $datosMes[date('n', strtotime($value->fecha))] += $value->comentarios;
     }
@@ -472,7 +472,7 @@ class Editor extends CI_Controller
    */
   public function cambiarimagen()
   {
-    $config['upload_path'] = './assets/img/editores/temporal/';
+    $config['upload_path'] = './assets/img/editores/timporal/';
     $config['allowed_types'] = 'gif|jpg|png';
     // $config['max_size'] = 100;
     // $config['max_width'] = 1024;
@@ -485,7 +485,7 @@ class Editor extends CI_Controller
       $datosFichero = $this->upload->data();
       // Borramos la anterior imagen si no es la por defecto
       $anteriorImg = $this->editores_m->obtenerImagen($_SESSION['id']);
-      if ($anteriorImg != 'editores\m-icon.png') {
+      if ($anteriorImg != 'editores\m-icon.png' && $anteriorImg != 'editores/m-icon.png') {
         unlink('./assets/img/' . $anteriorImg);
       }
 
@@ -501,6 +501,24 @@ class Editor extends CI_Controller
       // Si no se puede subir, mensaje de error y redireción
       $this->alertas->add('No se ha podido cambiar la <b>Imagen</b> de perfil, ha ocurrido el error.<p>' . print_r($this->upload->display_errors('<p>', '</p>'), true) . '</p>');
     }
+    redirect('editor/modificarPerfil');
+  }
+
+  /**
+   * Elimina la imagen actual del usuario y le pone la por defecto
+   *
+   * @return void
+   */
+  public function quitarImagen()
+  {
+    // Elimina la imagen actual
+    $imagenActual = $this->editores_m->obtenerImagen($_SESSION['id']);
+    if ($imagenActual != 'editores\m-icon.png' && $imagenActual != 'editores/m-icon.png') {
+      unlink('./assets/img/' . $imagenActual);
+    }
+    // Cambia su ruta en la BBDD
+    $this->editores_m->cambiarImagen('m-icon.png', $_SESSION['id']);
+    $this->alertas->add('<b>Imagen</b> de perfil eliminada con éxito.', 'success');
     redirect('editor/modificarPerfil');
   }
 
@@ -629,8 +647,77 @@ class Editor extends CI_Controller
     $datos['miCSS'] = 'noticias-seleccionar.css';
     $datos['miJS'] = ['js/noticias-seleccionar.js', 'js/admin-noticias-seleccionar.js'];
 
+    $this->load->view('template_editor', $datos);
+  }
+
+  /**
+   * Funcion para dministrar las solicitudes, a las cuales indicaremos
+   * si queremos hacerle admin o no
+   *
+   * @return void
+   */
+  public function adminSolicitudes()
+  {
+    $this->comprobarAdmin();
+    $datos['titulo'] = "Editor {$_SESSION['username']}";
+    $datos['contenido'] = 'editor/admin-solicitudes.php';
+    $datos['miCSS'] = 'noticias-seleccionar.css';
+    $datos['miJS'] = ['js/admin-solicitudes.js', ];
+
+
+    // Cargaremos los autores con noticias escritas
+    $this->load->model('solicitudes_m');
+    $datos['solicitudes'] = $this->solicitudes_m->obtenerSolicitudes();
 
     $this->load->view('template_editor', $datos);
+  }
+
+  /**
+   * Acepta la solicitud, generando un token para esa solicitud y mandando un correo con el enlace
+   * registro/"token" para poder registrar el editor
+   *
+   * @return void
+   */
+  public function aceptarSolicitud()
+  {
+    // Generamos el token
+    $token = bin2hex(random_bytes(20));
+    // Loguardamos en la BBDD
+    $this->load->model('solicitudes_m');
+    $this->solicitudes_m->actualizarSolicitud(['token' => $token], $_POST['id']);
+
+    // Se lo cargamos a la vista
+    $datos['token'] = $token;
+
+    // enviamos el email
+    $this->load->library('email');
+    $contenido = $this->load->view('login/emails/aceptado.php', $datos, true);
+    $this->email->from('zeitungiesagora@gmail.com', 'Zeitung');
+    $this->email->to($_POST['email']);
+    $this->email->subject('Solicitud ACEPTADA');
+    $this->email->message($contenido);
+    $this->email->send();
+  }
+
+  /**
+   * Rechaza la solicitud enviando un mensaje de rechazo y eliminando la solicitud
+   *
+   * @return 
+   */
+  public function rechazarSolicitud()
+  {
+    // enviamos el email
+    $this->load->library('email');
+    $contenido = $this->load->view('login/emails/rechazado.php', [], true);
+    $this->email->from('zeitungiesagora@gmail.com', 'Zeitung');
+    $this->email->to($_POST['email']);
+    $this->email->subject('Solicitud RECHAZADA');
+    $this->email->message($contenido);
+    $this->email->send();
+
+    // Eliminamos la solicitud
+    $this->load->model('solicitudes_m');
+    $this->solicitudes_m->eliminarSolicitudId($_POST['id']);
   }
 
   /**
@@ -668,3 +755,5 @@ class Editor extends CI_Controller
     }
   }
 }
+
+?>

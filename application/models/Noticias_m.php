@@ -1,6 +1,9 @@
 <?php 
 defined('BASEPATH') or exit('No direct script access allowed');
 
+/**
+ * Clase para manejar la tabla noticias de la BBDD
+ */
 class Noticias_m extends CI_Model
 {
   /**
@@ -205,6 +208,23 @@ class Noticias_m extends CI_Model
       ->get()->result();
   }
 
+  /**
+   * Busca tags similares al parametro introducido
+   *
+   * @param string $busqueda
+   * @return array
+   */
+  public function busquedaTags($busqueda)
+  {
+    return $this->db->select('noticias.id,noticias.autor,noticias.titulo,noticias.cabecera,noticias.fecha,CONCAT(editores.nombre," ",editores.apellidos) nombre,(SELECT COUNT(*) FROM comentarios WHERE comentarios.noticia=noticias.id) comentarios')
+      ->from('noticias')
+      ->join('editores', 'noticias.autor = editores.id')
+      ->join('tags_noticias', 'noticias.id = tags_noticias.noticia')
+      ->like('tag', $busqueda)
+      ->order_by('fecha', 'DESC')
+      ->get()->result();
+  }
+
   /* Metodos para las estaísticas */
   /**
    * Obtiene las noticias de este año
@@ -214,11 +234,11 @@ class Noticias_m extends CI_Model
    */
   public function noticiasPublicadasChart($idAutor)
   {
-    $year=date('Y');
+    $year = date('Y');
     return $this->db->select('fecha')
-    ->where('autor',$idAutor)
-    ->like('fecha',$year)
-    ->get('noticias')->result();
+      ->where('autor', $idAutor)
+      ->like('fecha', $year)
+      ->get('noticias')->result();
   }
 
   /**
@@ -227,16 +247,16 @@ class Noticias_m extends CI_Model
    * @param string $idAutor
    * @return array
    */
-  public function categoriasPublicadasChart ($idAutor)
+  public function categoriasPublicadasChart($idAutor)
   {
-    $year=date('Y');
+    $year = date('Y');
     return $this->db->select('(SELECT nombre FROM categorias WHERE noticias.categoria = categorias.id) categoria')
-    ->where('autor',$idAutor)
-    ->like('fecha',$year)
-    ->get('noticias')->result();
+      ->where('autor', $idAutor)
+      ->like('fecha', $year)
+      ->get('noticias')->result();
   }
 
-    /**
+  /**
    * Obtiene el numero de comentarios por noticia
    *
    * @param string $id
@@ -244,11 +264,10 @@ class Noticias_m extends CI_Model
    */
   public function comentariosChart($idAutor)
   {
-    $year=date('Y');
+    $year = date('Y');
     return $this->db->select('noticias.fecha,(SELECT COUNT(*) FROM comentarios WHERE comentarios.noticia = noticias.id) comentarios')
-    ->where('autor',$idAutor)
-    ->like('fecha',$year)
-    ->get('noticias')->result();
+      ->where('autor', $idAutor)
+      ->like('fecha', $year)
+      ->get('noticias')->result();
   }
 }
- 

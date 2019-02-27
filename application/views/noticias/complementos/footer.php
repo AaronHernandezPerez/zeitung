@@ -1,6 +1,6 @@
 <!-- Modal Contacto -->
 <div class="modal fade" id="modalContacto" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title">Contáctanos</h4>
@@ -8,13 +8,30 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer d-flex justify-content-around">
-        <a href="" class="btn btn-primary" data-dismiss="modal">Enviar</a>
-        <button type="button" class="btn btn-dark" data-dismiss="modal">Cancelar</button>
-      </div>
+      <form action="mailto:zeitungiesagora@gmail.com" method="post" enctype="text/plain">
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="col">
+              <label for="subject">Asunto</label>
+              <input type="text" class="form-control" name="subject" placeholder="Ej. Carlos Barriga Centigrados">
+            </div>
+            <div class="col">
+              <label for="">Tu email</label>
+              <input type="email" class="form-control" name="cc" placeholder="Ej. algo@email.com">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="body">Texto</label>
+            <textarea name="body" class="form-control" rows="3"></textarea>
+          </div>
+
+        </div>
+        <div class="modal-footer d-flex justify-content-around">
+          <button type="submit" class="btn btn-primary" data-dismiss="modal">Enviar</a>
+            <button type="button" class="btn btn-dark" data-dismiss="modal">Cancelar</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

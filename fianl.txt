@@ -1,4 +1,0 @@
-subscripcion newsletter
-registro por invitaicion
-cambiar layout
-terminar login
