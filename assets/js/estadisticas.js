@@ -1,7 +1,7 @@
 
 // Cargamos los datos por AJAX y creamos las estadísticas
 
-// Linea de Noticias
+// Gráfica de Linea de Noticias
 const notp = $("#notp");
 $.post(`${BASE_URL}editor/noticiasPublicadasChart`,
   function (datos) {
@@ -88,10 +88,8 @@ $.post(`${BASE_URL}editor/noticiasPublicadasChart`,
   }
 );
 
-$(function name(params) {
 
-});
-/* Donut de Categorias */
+/* Gráfica de Donut de Categorias */
 const catp = $('#catp');
 
 $.post(`${BASE_URL}editor/categoriasPublicadasChart`,
@@ -143,7 +141,7 @@ $.post(`${BASE_URL}editor/categoriasPublicadasChart`,
 );
 
 
-// Linea de comentario
+// Gráfica de  Linea de comentario
 const comentp = $("#comentp");
 $.post(`${BASE_URL}editor/comentariosChart`,
   function (datos) {

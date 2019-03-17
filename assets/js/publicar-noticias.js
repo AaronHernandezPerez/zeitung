@@ -1,3 +1,4 @@
+// Opciones para la libreria Quill
 var toolbarOptions = [
   [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
   ['bold', 'italic', 'underline', 'strike'],
@@ -12,6 +13,7 @@ var toolbarOptions = [
   ['clean']
 ];
 
+// Implementación del editor Quill
 const cuerpo = new Quill('#cuerpo', {
   modules: {
     toolbar: toolbarOptions
@@ -20,6 +22,7 @@ const cuerpo = new Quill('#cuerpo', {
   placeholder: 'Escribe tu noticia'
 });
 
+// Antess de enviarlo se codifica el texto del editor
 $('form:eq(0)').on('submit', function () {
   event.preventDefault();
   // Pasa el HTML interno codificado

@@ -1,4 +1,6 @@
 
+// Archivo de prueba
+
 // Cargamos los datos por AJAX y creamos las estadísticas
 
 // Linea de Noticias

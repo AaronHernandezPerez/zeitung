@@ -1,3 +1,6 @@
+/**
+ * Funcion para introducir el comentario en la BBDD y añadir el comentario en la página
+ */
 $(function () {
   // Formulario para añadir un comentario
   const $fComentario = $('#fComentario');

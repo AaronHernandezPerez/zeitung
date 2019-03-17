@@ -34,7 +34,13 @@ $btnRechazar.on('click', function () {
 });
 
 
-
+/**
+ * Funcion para generar la alerta
+ *
+ * @param string id id de la alerta, utilizada para borrarla posteriormente
+ * @param string clase Clase de la alerta
+ * @param string texto Contenido de la alerta
+ */
 function alerta(id, clase, texto) {
   const alerta = `<div id="${id}" class="alert alert-${clase} alert-dismissible fade show w-50 ml-auto " role="alert">
   ${texto}

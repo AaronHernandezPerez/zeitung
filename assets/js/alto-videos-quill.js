@@ -1,3 +1,4 @@
+// Función para cambiar el tamaño de los videos del editor Quill
 $(function () {
   $('.ql-video').each(function () {
     $(this).attr('height', altoVideo(this));

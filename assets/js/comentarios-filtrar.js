@@ -31,6 +31,12 @@ $(function () {
     filtrarCheckbox(this.value)
   });
 
+  /**
+   * Dependiendo del valo introducido, mostrará los comentarios marcados para ser borrados,
+   * los no marcados o todos
+   *
+   * @param string value 
+   */
   function filtrarCheckbox(value) {
     switch (value) {
       case '1':

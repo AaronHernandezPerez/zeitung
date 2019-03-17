@@ -1,6 +1,6 @@
+// Obsoleta
 //<script src="<?= base_url('assets/libraries/chartjs/moment-with-locales.js') ?>"></script>
 //<script src="<?= base_url('assets/libraries/chartjs/Chart.bundle.js') ?>"></script>
-
 var config = {
   type: 'line',
   data: {

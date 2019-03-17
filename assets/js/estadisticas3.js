@@ -1,3 +1,4 @@
+// Obsoleta
 var chart = new CanvasJS.Chart("notp",
   {
     title: {

@@ -1,4 +1,8 @@
 const $file = $('#imagen_p');
+
+/**
+ * Función para mostrar el nombre de los archivos subidos en el input[file]
+ */
 $file.on('input', function () {
   const archivos = [...this.files];
   let archivosNombre = archivos.map(a => a.name);
@@ -10,7 +14,7 @@ $file.on('input', function () {
 const $pass1 = $('#password');
 const $pass2 = $('#password2');
 
-// 
+// Función para validar las contaseñas, esto es que sean mas de 5 caracteres y sean iguales
 $('input[type="password"]').on('input', function () {
   // Primero comprobamos que tengan almenos 6 carácteres
   $this = $(this);

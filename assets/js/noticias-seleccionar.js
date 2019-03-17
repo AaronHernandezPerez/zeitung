@@ -50,9 +50,10 @@ function borrarModal(elemento) {
       });
     });
 }
-// Manejador de eventos para las noticias sin comentarios
+
 let $btnComentarios = $('.btn-coment')
 
+// Manejador de eventos para las noticias sin comentarios
 $btnComentarios.on('click', function () {
   const id = `alertaBorrar${contAlertas++}`
   $contAlertas.append(alertaBorrar(id));
@@ -61,7 +62,13 @@ $btnComentarios.on('click', function () {
   }, 2500);
 });
 
-
+/**
+ * Funcion para generar la alerta
+ *
+ * @param string id id de la alerta, utilizada para borrarla posteriormente
+ * @param string clase Clase de la alerta
+ * @param string texto Contenido de la alerta
+ */
 function alertaBorrar(id) {
   return `<div id="${id}" class="alert alert-danger alert-dismissible fade show w-50 ml-auto " role="alert">
   Esta noticia <strong>no tiene comentarios</strong>.
