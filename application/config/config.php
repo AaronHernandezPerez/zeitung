@@ -23,7 +23,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
  */
-$config['base_url'] = 'http://localhost/z/';
+$config['base_url'] = 'http://localhost:8080/';
 
 /*
 |--------------------------------------------------------------------------
@@ -380,7 +380,7 @@ $config['encryption_key'] = '';
 $config['sess_driver'] = 'files';
 $config['sess_cookie_name'] = 'ci_session';
 $config['sess_expiration'] = 7200;
-$config['sess_save_path'] = null;
+$config['sess_save_path'] = '/var/www/html/application/session';;
 $config['sess_match_ip'] = false;
 $config['sess_time_to_update'] = 300;
 $config['sess_regenerate_destroy'] = false;

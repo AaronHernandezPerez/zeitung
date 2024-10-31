@@ -106,6 +106,11 @@ class Login extends CI_Controller
     // Comprobamos que el editor exista
     if ($resultado = $this->editores_m->obtenerDatosLogin($_POST['username'])) {
       // Si el usuario es correcto comprobamos la contraseña
+			// Print pass
+			error_log("This is a debug message");
+			error_log(print_r($_POST['password'], true));
+			error_log(print_r($resultado->password, true));
+			error_log(password_verify($_POST['password'], $resultado->password));
       if (password_verify($_POST['password'], $resultado->password)) {
         // Si la contraseña es correcta lo logueamos y lo redireccionamos a editor
         // Iniciamos sesión

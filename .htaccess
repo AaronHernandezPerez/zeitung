@@ -1,5 +1,5 @@
 RewriteEngine On
-RewriteBase /z/
+RewriteBase /
 RewriteCond $1 !^(index.php|css|js|images|robots.txt|assets)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
